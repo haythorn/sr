@@ -24,8 +24,11 @@ Depends:
     R (>= 2.10)
 Imports: 
     ggplot2,
-    knitr,
-    magrittr,
     progress,
     RANN,
     stats
+Suggests: 
+    rmarkdown,
+    knitr,
+    magrittr,
+    nnet
