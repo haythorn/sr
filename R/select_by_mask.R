@@ -22,14 +22,15 @@
 select_by_mask <- function(data, intMask) {
   #===========================================================
 
-  if (ncol(data) != length(intMask)) {
-    stop("Error: Mask length not equal to input column dimension")
+  if (ncol(data) != length(intMask)){
+    stop("Error select_by_mask: Mask length not equal to input column dimension")
+  }
+  if (sum(intMask) < 1) {
+    stop("Error select_by_mask: empty mask")
   }
 
   indices <- which(intMask == 1)
-  newData <- data[ ,indices]   # the input columns
-
-  names(newData) <- names(data)[indices]  # is this necessary?
+  newData <- data[ ,indices]
 
   return(newData)
 }

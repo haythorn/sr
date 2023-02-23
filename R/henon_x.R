@@ -4,11 +4,11 @@
 #'
 #' @docType data
 #'
-#' @usage data(henon_x)
+#' @usage henon_x
 #'
 #' @keywords datasets
 #'
-#' @references See Wikipedia entry on the Henon Map
+#' @references See Wikipedia entry on "Hénon map"
 #'
 #' @examples
 #' henon_embedded <- embed(as.matrix(henon_x), 3)

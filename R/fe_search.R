@@ -28,7 +28,7 @@
 #' @param eps The error limit for the approximate near neighbor search.  This
 #' will be passed to gamma_test, which will pass it on to the ANN near neighbor search.  Setting
 #' this greater than zero can significantly reduce search time for large data sets.
-#' @return A data frame with two columns, an integer mask representing a particular subset of
+#' @return An invisible data frame with two columns, an integer mask representing a particular subset of
 #' the predictors, and the value of Gamma using those predictors and the target.
 #' This is sorted from lowest to highest Gamma.
 #' @examples
@@ -77,6 +77,6 @@ fe_search <- function(predictors,
   }
   x <- data.frame(mask = 1:length(gammas), Gamma = gammas)
   x <- x[order(x$Gamma), ]
-  return(x)
+  invisible(x)
 }
 

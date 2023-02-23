@@ -4,11 +4,11 @@
 #'
 #' @docType data
 #'
-#' @usage data(example2_data)
+#' @usage example2_data
 #'
 #' @keywords datasets
 #'
-#' @references Described in time serries vignette
+#' @references Described in vignette 1_time_series_with_sr
 #'
 #' @examples
 #' ex2_embedded <- embed(as.matrix(example2_data), 25)

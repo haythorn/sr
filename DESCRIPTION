@@ -6,9 +6,10 @@ Author: Wayne Haythorn, Sam Kemp, Antonia Jones
 Maintainer: Wayne Haythorn <wayne@haythorn.us>
 Description: Smooth regression provides tools for finding causal relations in 
   precision data.  It is based on the Gamma test, which measures the noise in a
-  data relationship relative to all smooth models.  Gamma estimates the mean 
-  squared error of the best smooth model that can be built on the data it is 
-  given. Gamma and search tools are used to identify causal relations, find 
+  data relationship relative to all smooth models, thus all neural network models
+  or differential equations with bounded (finite) derivatives.  Gamma estimates 
+  the mean squared error of the best smooth model that can be built on the data 
+  it is given. Gamma and search tools are used to identify causal relations, find 
   lags and embeddings in time series analysis, decide how much data is needed 
   to build a stable model, evaluate the performance of a model, and prevent 
   overtraining.
@@ -26,9 +27,11 @@ Imports:
     ggplot2,
     progress,
     RANN,
-    stats
+    stats,
+    vdiffr
 Suggests: 
-    rmarkdown,
     knitr,
     magrittr,
-    nnet
+    nnet,
+    rmarkdown,
+    testthat (>= 3.0.0)

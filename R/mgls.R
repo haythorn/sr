@@ -4,14 +4,14 @@
 #'
 #' @docType data
 #'
-#' @usage data(mgls)
+#' @usage mgls
 #'
 #' @keywords datasets
 #'
-#' @references See Wikipedia entry on Mackey-Glass equations
+#' @references See Wikipedia entry on "Mackey-Glass equations"
 #'
 #' @examples
-#' mgls_embedded <- embed(as.matrix(mgls), 25)  # 24 predictors, 1 target
+#' mgls_embedded <- embed(as.matrix(mgls), 25)
 #' targets <- mgls_embedded[ ,1]
 #' predictors <- mgls_embedded[ ,2:25]
 "mgls"

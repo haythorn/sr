@@ -3,9 +3,11 @@
 #'
 #' Converts the bit representation of an integer into a vector of integers
 #'
-#' This will produce a vector of ones and zeroes.  It is used as a helper
+#' This converts an integer to a vector of ones and zeroes.  It is used as a helper
 #' function for full_embedding_search, and allows more compact storage of bit masks.
-#' It will work for masks up to 32 bits
+#' The result reads left to right, so the one bit will have index of one in the
+#' vector corresponding to the lag in an embedding.  It will work for masks up
+#' to 32 bits
 #' @export
 #' @param i A 32 bit integer
 #' @param length Integer length of the bitmask to produce, must be <= 32

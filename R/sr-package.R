@@ -13,7 +13,6 @@
 #' @importFrom ggplot2 labs
 #' @importFrom ggplot2 scale_x_continuous
 #' @importFrom ggplot2 theme
-#' @importFrom RANN nn2
 #' @importFrom stats lm
 #' @importFrom stats var
 ## usethis namespace: end

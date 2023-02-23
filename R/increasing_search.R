@@ -32,28 +32,30 @@ increasing_search <- function(predictors,
   input_dimension <- ncol(predictors)
 
   mask <- integer(input_dimension)
-  gtarray <- double(input_dimension)
+  result <- data.frame(Depth = 1:input_dimension,
+                       Gamma = double(input_dimension),
+                       vratio = double(input_dimension))
   for(i in 1:input_dimension)
   {
     mask[i] <- 1
     inputs <- select_by_mask(predictors, mask)
-    res <- gamma_test(predictors = inputs,
-                      target = target)$Gamma
-    gtarray[i] <- abs(res)
+    g <- gamma_test(predictors = inputs, target = target)
+    result$Gamma[i] <- g$Gamma
+    result$vratio[i] <- g$vratio
   }
 
-  ret <- (data.frame(Depth = 1:input_dimension, Gamma=gtarray))
   if (plot) {
-   print(ggplot(data = ret) +
-      geom_line(mapping = aes(x = Depth, y = Gamma)) +
-      theme(plot.title.position = 'plot',
-            plot.title = element_text(hjust = 0.5)) +
-      labs(
-        title = "Increasing Embedding",
-        caption = caption,
-        x = "Embedding depth",
-        y = "Gamma"
-      ))
+   print(ggplot(data = result) +
+         geom_line(mapping = aes(x = Depth, y = Gamma), color = 'blue') +
+         geom_line(mapping = aes(x = Depth, y = vratio), color = 'green') +
+         theme(plot.title.position = 'plot',
+               plot.title = element_text(hjust = 0.5)) +
+         labs(title = "Increasing Embedding",
+              caption = caption,
+              x = "Embedding depth",
+              y = "Gamma, vratio"
+              )
+        )
   }
-  invisible(ret)
+  invisible(result)
 }
