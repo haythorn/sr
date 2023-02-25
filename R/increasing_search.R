@@ -47,13 +47,13 @@ increasing_search <- function(predictors,
   if (plot) {
    print(ggplot(data = result) +
          geom_line(mapping = aes(x = Depth, y = Gamma), color = 'blue') +
-         geom_line(mapping = aes(x = Depth, y = vratio), color = 'green') +
+         # geom_line(mapping = aes(x = Depth, y = vratio), color = 'green') +
          theme(plot.title.position = 'plot',
                plot.title = element_text(hjust = 0.5)) +
          labs(title = "Increasing Embedding",
               caption = caption,
               x = "Embedding depth",
-              y = "Gamma, vratio"
+              y = "Gamma"
               )
         )
   }

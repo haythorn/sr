@@ -1,9 +1,10 @@
 test_that("mask_histogram works", {
   # compare some results (one fe_search, multiple samples)
-  pt <- get_pt(8)
-  p <- pt$p
-  t <- pt$t
-  fes <- fe_search(p, t)
-  vdiffr::expect_doppelganger("plot mask bits", mask_histogram(fes[1:32, ], 8, caption="test plot"))
+  me <- embed(mgls, 9)
+  t <- me[ ,1]
+  p <- me[ ,2:9]
+  fe_out <- fe_search(p, t)
+  vdiffr::expect_doppelganger("plot mask bits",
+                              mask_histogram(fe_out[1:32, ], 8, caption="test plot"))
 
 })

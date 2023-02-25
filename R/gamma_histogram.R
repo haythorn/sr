@@ -25,7 +25,7 @@ gamma_histogram <- function(fe_results, bins = 100, caption = "")
   ggplot(fe_results, aes(x = Gamma)) +
     geom_histogram(bins=bins, color="#000000", fill="blue") +
     labs(
-      title = "Distribution of Gammas",
+      title = paste("Distribution of ", nrow(fe_results), " Gammas"),
       caption = caption,
       x = "Gamma values",
       y = "Count"

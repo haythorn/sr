@@ -77,6 +77,8 @@ fe_search <- function(predictors,
   }
   x <- data.frame(mask = 1:length(gammas), Gamma = gammas)
   x <- x[order(x$Gamma), ]
+  attr(x, "targe_v") <- var(target)
+
   invisible(x)
 }
 

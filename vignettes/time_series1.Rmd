@@ -1,0 +1,283 @@
+---
+title: "Smooth Regression for Time Series (1)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{time_series_with_sr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 4, 
+  fig.height = 3
+)
+```
+
+```{r setup}
+library(sr)
+library(ggplot2)
+library(nnet)
+library(magrittr)
+```
+
+## Selecting Predictors with the Gamma Test
+
+
+This vignette will introduce you to selecting good predictive inputs using the Gamma
+test.  There are many situations in which we want to know what to measure, in order
+to predict something else, for example we might want to know which survey questions 
+actually predict voting or buying behavior.  
+
+The example we will use in this vignette is determining lags in time series.  
+Figuring out the cycles in a chaotic process - which previous measures to use to
+predict the next - is a classic problem of selecting predictors.
+
+This vignette will demonstrate using Gamma to 
+  - search for causal relationships in time series data, 
+  - determine optimum lags and embeddings, and 
+  - tune the performance of a neural network.  
+
+The vignette will use artificial data sets built from two equations that are commonly used to demonstrate chaotic dynamics.  Using artificial data will allow us to compare what the Gamma test tells us with what we know is true.
+
+
+
+
+## 1) A chaotic function with no noise
+
+### The Henon Map
+
+Suppose we are asked to analyze this data:
+
+
+```{r henon, fig.width = 5, fig.height=4, fig.align='center'}
+
+  # henon_x <- read.csv("henon_ix.csv")
+  str(henon_x)
+  hix <- data.frame(idx = 1:length(henon_x), x = henon_x)
+  p <- ggplot(data = hix) +
+    geom_point(mapping = aes(x = idx, y = x), shape = ".") +
+    labs(title = "Henon Map") +
+         xlab("time step") +
+         ylab("value")
+  p
+
+```
+
+It looks a little more regular if we connect the dots.
+
+```{r henonline, fig.width = 5, fig.height=4, fig.align='center'}
+
+  p + geom_line(mapping = aes(x = idx, y = x), color = "blue")
+
+```
+
+
+Now we can see some structure to it, but it is not at all obvious that it represents a very simple pair of equations.  According to Wikipedia: "The Hénon map ... is a discrete-time dynamical system. It is one of the most studied examples of dynamical systems that exhibit chaotic behavior. The Hénon map takes a point (x[n], y[n]) in the plane and maps it to a new point
+
+```
+# x[n+1] <- 1 - a * x[n] ^ 2 + y[n]
+# y[n+1] <- b * x[n]
+```
+
+For the right choices of the a and b the behavior is chaotic.  The data doesn't look smooth but the underlying functions are - their derivatives are finite.  Since y depends only on the previous x, we can predict the next x value from the two previous x values,  
+
+
+### Finding a good embedding
+
+But the overlords who are presenting us with the problem haven't told us that, maybe they don't know.  How do we figure it out?
+
+We need answers to several questions, the first is: how far back in time do we have to look, in order to predict the next point?  Each measurement from the past has a lag.  Together the lags we look at make an embedding.  We need to find an embedding.
+
+To do this, we begin by making a trial.  I will arbitrarily pick an embedding depth of 15, so we'll be seeing how well we can predict each point using the previous 15 - after the first 15 of course.  embed from the stats library reverses the order of the values, so the targets are in column 1, with the lag 1 predictors in column 2.
+
+
+```{r embed_henon}
+  search_depth <- 15       # number of candidate predictors
+  henon_embedded <- embed(as.matrix(henon_x), search_depth+1)  # plus 1 target
+  targets <- henon_embedded[ ,1]
+  predictors <- henon_embedded[ ,2:(search_depth+1)]
+  
+  
+```
+
+
+To find the right embedding, we use an **increasing embedding search**.  This takes the lag 1 predictor and measures Gamma. Then it uses lags 1 and 2, measuring Gamma while adding an additional lag at each step.  The result is usually examined visually.  The increasing_search function returns a data frame, and plots it unless you set plot = FALSE, 
+
+```{r plot_increasing}
+  increasing_search(predictors=predictors, 
+                    target=targets,
+                    caption = "HenonX data")
+
+```
+
+
+Gamma estimates noise - mean squared error. This plot shows Gamma dropping to almost zero with an embedding of 2, in other words, Gamma immediately recognizes the causality in the data.  You wont get graphs like this very often with real data. Beyond an embedding of 7, gamma starts to rise again, because the extraneous variables obscure the smooth relationship. 
+
+
+Looking at the graph, one might imagine that an embedding of 6 would be somehow better than 2, "more stable" or whatever.  But if the lags between 3 and 6 added any information, *Gamma would go down*.   In this case, of course, they can't add information, because the mean squared error estimate is already zero.  But in general, when you see a long flat floor on the increasing embedding search, the causality is at the beginning.  Those additional variables are not confirming votes, it's just that the relationship is strong enough that it is not obscured by a few  random variables.  
+
+If you want to work with the numbers, you can get the result of the increasing search as a data.frame:
+
+
+```{r get_increasing}
+  tmp <- increasing_search(predictors=predictors, 
+                    target=targets,
+                    plot = FALSE)
+  tmp
+
+```
+
+
+So, looking at the graph I'm going to use an embedding of 2.  We will also scale the data, before dividing it into training and test sets for the neural network.  To build the neural net I will use the nnet package, which expects its data to be scaled between 0 and 1.  Gamma does not require scaling.
+
+
+```{r gamma_test}
+
+  scale01 <- function(x) {
+    maxx <- max(x)
+    minx <- min(x)
+    return(scale(x, 
+                 center = minx, 
+                 scale = maxx - minx))
+  }
+
+  henon_scaled <- scale01(henon_x)
+  
+  search_depth <- 2
+  henon_embedded <- embed(as.matrix(henon_scaled), search_depth+1)
+  p <- henon_embedded[ ,2:(search_depth+1)]
+  t <- henon_embedded[ ,1]
+  gamma_test(predictors = p, target = t)
+```
+
+Real noise in the data is zero, the Gamma estimate is 1.58e-05, close enough for statistical work.  To understand the results without having to think about how the data is scaled, use the vratio, which is Gamma divided by Var(targets), so it gives the percentage of variance accounted for by estimated noise, and 1 - vratio gives the percentage accounted for by the unknown smooth function, .9998 in this case.
+
+
+### Do we have enough data? - the M list
+
+A second question is, how much confidence can we have in Gamma's estimate of the true noise?  Unfortunately, at this time there isn't any known way to calculate confidence intervals around Gamma, but the **M list** gives us a basis for a heuristic confidence estimate.  It allows us to see if Gamma becomes more stable as we add more data.  If it doesn't, we probably don't have enough data.  
+
+The function get_Mlist computes Gamma for larger and larger portions of the data set.  What we are looking for in an M list is stability - after a certain point, Gamma should settle to an estimate that doesn't drift as more data is added.   
+
+
+```{r M_test}
+
+  get_Mlist(predictors = p, 
+            target = t, 
+            caption = "HenonMap.csv embedding 2")
+
+```
+
+
+In this case, as M increases, Gamma is supernaturally stable. Based on this M list, I'm going to put 600 cases in the training set and keep 400 for the test set.  
+
+
+```{r}
+lt <- length(t)
+
+train_t <- t[1:600]
+train_p <- p[1:600, ]
+
+test_t <- t[601:lt]
+test_p <- p[601:lt, ]
+
+```
+
+
+
+### Building a model
+
+Now we are going to  build a neural net using the nnet package.  We will begin by using the parameters in the reference page example and hidden layer size equal to the number of predictors, a choice which is often recommended by the internet.
+
+
+```{r nnet_model, cache=TRUE}
+
+set.seed(3)
+
+n_model <- nnet(x = train_p, y = train_t, size = 2, rang = 0.1,
+                decay = 5e-4, maxit = 200 )
+
+predicted_t <- predict(n_model, test_p, type = "raw")
+
+test_result <- data.frame(idx = 1:length(test_t), predicted_t[ ,1], test_t)
+colnames(test_result) <- c("idx", "predicted", "actual")
+
+
+ggplot(data = test_result[1:50, ]) +
+  geom_line(mapping = aes(x = idx, y = actual), color = "green") +
+  geom_line(mapping = aes(x = idx, y = predicted), color = "blue") +
+  geom_line(mapping = aes(x = idx, y = actual - predicted), color = "red") +
+  labs(y = "predicted over actual",
+      title = "Henon Model Test")
+
+# Gamma estimate of noise sse
+train_gamma <- gamma_test(predictors = train_p, target = train_t)$Gamma
+train_gamma * length(train_t)
+
+# sum of squared error according to model residuals
+sum(n_model$residuals ^ 2)
+
+# sum of squared errors on test data
+with(test_result, sum((actual - predicted)^2))
+
+
+```
+
+
+For a quick model built with the default parameters, this looks pretty good, but according to Gamma we should be able to to a lot better.  The model residuals are .64 and actual error on test data is .50, where Gamma says we should be getting .014.  
+
+This vignette is not going to go into detail about working between Gamma and neural net software, that deserves a vignette of its own, but we will make one pass at it here, to show you the general approach.  The Gamma test can be used with any neural net software that allows a mean squared error stopping condition for training.  nnet allows this with the abstol parameter. We will build a new net using this stopping condition, more hidden layer units, and a smaller decay parameter.  Decay is used to prevent overtraining, we have the Gamma test which is a more principled way to do that.  In general, when you adapt a model to Gamma, you will want to clear away a lot of stuff that's called "regularization", much of it is kludges that people have used because they didn't have a good mean squared error estimator, you do.
+
+
+```{r nnet_by_gamma, cache=TRUE}
+
+estimated_sse <- train_gamma * length(train_t)
+gamma_model <- nnet(x = train_p, y = train_t, size = 8, rang = 0.1,
+                decay = 1e-5, maxit = 2000, abstol =  estimated_sse)
+
+predicted_gt <- predict(gamma_model, test_p, type = "raw")
+
+test_result <- data.frame(idx = 1:length(test_t), predicted_gt[ ,1], test_t)
+colnames(test_result) <- c("idx", "predicted", "actual")
+
+ggplot(data = test_result[1:50, ]) +
+  geom_line(mapping = aes(x = idx, y = actual), color = "green") +
+  geom_line(mapping = aes(x = idx, y = predicted), color = "blue") +
+  geom_line(mapping = aes(x = idx, y = actual - predicted), color = "red") +
+  labs(y = "predicted over actual",
+      title = "Henon Model Using Gamma")
+
+# Gamma estimate of error -  gamma times number of observations
+estimated_sse  
+
+# error according to model residuals
+sum(gamma_model$residuals ^ 2)
+
+# sum of squared errors on test data
+with(test_result, sum((actual - predicted)^2))
+
+
+
+```
+
+This does considerably better.  Gamma still says we can cut the error in half but I'm not going to fuss around with it.  Neural net building is a topic for another vignette, using neural net software that has some documentation and more than one hidden layer. 
+
+
+### Summary: 
+
+
+**This first example has shown the Gamma test used in four ways:**
+
+  - **to identify an embedding** - How many previous values of the time series do we want, in order to predict the next one?  We saw the Gamma test immediately recognize a causal function even though it was chaotic, and identify the correct embedding using a simple increasing search.
+  
+  - **to decide how much data is needed to build a model** - The M list tells us how much confidence we can have in Gamma's estimate.  It allows us to make a more informed decision about whether we have enough data, and how much data to use for model training vs. testing.
+  
+  - **to evaluate the performance of a model** - Although our first model looked OK, given the complexity of what it had to model, the Gamma test told us that we could do better.  A mean squared error estimator tells you how well your model should do, so you know when you need to build another model.  
+  
+  - **to prevent overtraining** - Learning algorithms are subject to overfitting.  Gamma does not work by minimizing some parameter, it directly measures the variance of the noise.  It is called the Gamma "test" because it directly tests for the presence of a smooth function.  This makes it a good complement to neural net learning algorithms and local linear regression.  
+  
+
+In the next (second) vignette, we will look at using Gamma with noisy data.
