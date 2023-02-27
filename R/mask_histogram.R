@@ -35,7 +35,9 @@ mask_histogram <- function(fe_result,
   }
   # plot labels, seems like I'm missing an easier solution but here it is
   ticks <- seq(from = 1, to = dimension, by = tick_step)
-  ggplot(data = data.frame(idx = 1:dimension, temp), aes(x = idx, y = temp)) +
+  idx <- NULL
+  ggplot(data = data.frame(idx = 1:dimension, temp),
+         aes(x = idx, y = temp)) +
     geom_col(fill = "blue") +
     scale_x_continuous(breaks = ticks) +
     labs(

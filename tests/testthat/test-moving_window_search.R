@@ -9,6 +9,16 @@ test_that("moving_window_search works", {
   t <- pt$t
 
   # plot
-  vdiffr::expect_doppelganger("moving window works", moving_window_search(p,t, window_size = 50, by = 2))
+  vdiffr::expect_doppelganger("moving window works",
+                              moving_window_search(p,t,
+                                                   window_size = 50,
+                                                   by = 2))
+  vdiffr::expect_doppelganger("moving window vratio",
+                              moving_window_search(p,t,
+                                                   window_size = 50,
+                                                   by = 2,
+                                                   show="vratio"))
+
+
 
 })

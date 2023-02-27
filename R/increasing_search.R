@@ -12,6 +12,8 @@
 #' @param target A vector of double, the output variable that is to be predicted
 #' @param plot Logical, set plot = FALSE if you don't want the plot
 #' @param caption Character string to identify plot, for example, data being plotted
+#' @param show Character string, if it equals "vratio", vratios will be plotted,
+#' otherwise Gamma is plotted
 #' @return An invisible data frame showing the depth of search and associated Gamma
 #' @examples
 #' he <- embed(henon_x, 17)
@@ -23,7 +25,8 @@
 increasing_search <- function(predictors,
                               target,
                               plot = TRUE,
-                              caption = "")
+                              caption = "",
+                              show = "Gamma")
   #===========================================================
 {
   if (is.vector(predictors)) {
@@ -44,16 +47,20 @@ increasing_search <- function(predictors,
     result$vratio[i] <- g$vratio
   }
 
+  if (show != "vratio") show <- "Gamma"
+
+  Depth <- NULL    # prevent note for CRAN submission
   if (plot) {
    print(ggplot(data = result) +
-         geom_line(mapping = aes(x = Depth, y = Gamma), color = 'blue') +
-         # geom_line(mapping = aes(x = Depth, y = vratio), color = 'green') +
+         geom_line(mapping = aes(x = Depth,
+                                 y = get(show)),
+                   color = 'blue') +
          theme(plot.title.position = 'plot',
                plot.title = element_text(hjust = 0.5)) +
          labs(title = "Increasing Embedding",
               caption = caption,
               x = "Embedding depth",
-              y = "Gamma"
+              y = show
               )
         )
   }

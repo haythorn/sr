@@ -9,6 +9,7 @@ get_Mlist(
   target,
   plot = TRUE,
   caption = "",
+  show = "Gamma",
   from = 20,
   to = length(target),
   by = 20
@@ -23,6 +24,9 @@ inputs to a predictive relationship}
 \item{plot}{A logical, set this to FALSE if you don't want the plot}
 
 \item{caption}{Character string to be used as caption for the plot}
+
+\item{show}{Character string, if it equals "vratio", vratios will be plotted,
+otherwise Gamma is plotted}
 
 \item{from}{Integer length of the first data sample, as passed to seq}
 

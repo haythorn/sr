@@ -1,5 +1,5 @@
 test_that("fe_search works", {
-  # successful tests, e.g. math is covered by gamma_histogram tests
+  # successful tests, e.g. math is covered by gamma_histogram test
   # a couple of failure tests:
   x <- 1:500
   expect_error(fe_search(x, x))

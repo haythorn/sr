@@ -7,6 +7,8 @@
 #' @param target A Numeric vector, the output variable that is to be predicted
 #' @param plot A logical, set this to FALSE if you don't want the plot
 #' @param caption Character string to be used as caption for the plot
+#' @param show Character string, if it equals "vratio", vratios will be plotted,
+#' otherwise Gamma is plotted
 #' @param from Integer length of the first data sample, as passed to seq
 #' @param by Integer increment in lengths of successive windows, passed to seq
 #' @param to Integer maximum length of sample to test, passed to seq
@@ -24,6 +26,7 @@ get_Mlist <- function(predictors,
                       target,
                       plot = TRUE,
                       caption = "",
+                      show = "Gamma",
                       from = 20,
                       to=length(target),
                       by=20)
@@ -48,10 +51,16 @@ get_Mlist <- function(predictors,
     result$vratio[i] <- g$vratio
   }
 
+  if (show != "vratio") show <- "Gamma"
+
+  M <- NULL
   if (plot) {
     print(ggplot(data = result) +
-      geom_line(mapping = aes(x = M, y = vratio)) +
-      labs(title = "M list", caption = caption) +
+      geom_line(mapping = aes(x = M,
+                              y = get(show))) +
+      labs(title = "M list",
+           caption = caption,
+           y = show) +
       theme(plot.title.position = 'plot',
             plot.title = element_text(hjust = 0.5)))
   }

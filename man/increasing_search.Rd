@@ -4,7 +4,13 @@
 \alias{increasing_search}
 \title{Increasing Embedding Search engine, used by get/plot increasing_search}
 \usage{
-increasing_search(predictors, target, plot = TRUE, caption = "")
+increasing_search(
+  predictors,
+  target,
+  plot = TRUE,
+  caption = "",
+  show = "Gamma"
+)
 }
 \arguments{
 \item{predictors}{A vector or matrix whose columns are proposed inputs to a predictive function}
@@ -14,6 +20,9 @@ increasing_search(predictors, target, plot = TRUE, caption = "")
 \item{plot}{Logical, set plot = FALSE if you don't want the plot}
 
 \item{caption}{Character string to identify plot, for example, data being plotted}
+
+\item{show}{Character string, if it equals "vratio", vratios will be plotted,
+otherwise Gamma is plotted}
 }
 \value{
 An invisible data frame showing the depth of search and associated Gamma

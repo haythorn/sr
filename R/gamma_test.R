@@ -78,7 +78,7 @@ gamma_test <- function(predictors,
   gradient <- z$coefficients[[2]]
   vratio <- Gamma/var(target)
   # mse <- var(z$residuals)
-
+  x <- y <- NULL
   if (plot) {
     print(ggplot(data = data.frame(y = as.vector(gamma_distances), x = as.vector(delta_neighbors$nn.dists))) +
         geom_point(mapping = aes(x = x, y = y), shape = ".") +

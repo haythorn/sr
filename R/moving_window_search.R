@@ -12,6 +12,8 @@
 #' @param target A Numeric vector, the output variable that is to be predicted
 #' @param plot Logical, set this to FALSE if you don't want the plot
 #' @param caption Character string, caption for plot
+#' @param show Character string, if it equals "vratio", vratios will be plotted,
+#' otherwise Gamma is plotted
 #' @param window_size Integer width of the window that will move through the data
 #' @param by The increment between successive window starts
 #' @return An invisible data frame containing starting and ending positions of
@@ -28,7 +30,8 @@ moving_window_search <- function(predictors,
                                 window_size = 40,
                                 by = 1,
                                 plot = TRUE,
-                                caption = "")
+                                caption = "",
+                                show = "Gamma")
 #===========================================================
 {
 
@@ -39,8 +42,8 @@ moving_window_search <- function(predictors,
   n_windows <- floor((length(target) - window_size) / by)
   outp <- data.frame(starts=integer(n_windows),
                      ends=integer(n_windows),
-                     Gammas=double(n_windows),
-                     vratios=double(n_windows))
+                     Gamma=double(n_windows),
+                     vratio=double(n_windows))
   outp$starts <- 1 + 0:(n_windows-1) * by
   outp$ends <- outp$starts + window_size
 
@@ -52,17 +55,21 @@ moving_window_search <- function(predictors,
     outp$vratio[i] <- gt$vratio
   }
 
+  if (show != "vratio") show <- "Gamma"
+
+  starts <- NULL   # to kill the dreaded NOTE
   if(plot) {
     twid <- floor(n_windows / 12)
     ticks <- seq(from = twid, to = n_windows, by = twid) * by
     print(ggplot(data = outp) +
-      geom_line(mapping = aes(x = starts, y = Gamma)) +
+      geom_line(mapping = aes(x = starts,
+                              y = get(show))) +
       scale_x_continuous(breaks = ticks) +
       labs(title = "Moving Window Search",
            caption = caption,
            subtitle = paste("Each window contains ", window_size, " data points"),
            x = "Window start",
-           y = "Gamma"
+           y = show
       ))
   }
 

@@ -13,7 +13,10 @@
 #' @importFrom ggplot2 labs
 #' @importFrom ggplot2 scale_x_continuous
 #' @importFrom ggplot2 theme
+#' @importFrom stats embed
 #' @importFrom stats lm
+#' @importFrom stats rnorm
 #' @importFrom stats var
+#' @importFrom vdiffr expect_doppelganger
 ## usethis namespace: end
 NULL

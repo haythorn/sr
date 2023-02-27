@@ -22,6 +22,7 @@
 gamma_histogram <- function(fe_results, bins = 100, caption = "")
   #===========================================================
 {
+  Gamma <- NULL
   ggplot(fe_results, aes(x = Gamma)) +
     geom_histogram(bins=bins, color="#000000", fill="blue") +
     labs(

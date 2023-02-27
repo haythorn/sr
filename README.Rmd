@@ -1,0 +1,73 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# sr
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Smooth Regression is a set of techniques for finding causal relationships in precision data.  It is built around the Gamma test.  If you have some measurements that might be predictive, and a target that you want to predict, Gamma estimates the mean squared error of the best smooth model that could be built on that data.  In linear regression, the intercept coefficient tells you the expected error of the model.  Gamma does this for smooth models as a class.  It measures smoothness in a data relationship.  Smoothness is a property of natural causal processes.  Natural processes differ from noise because they are smooth, and noise is not.  Neural networks are smooth models, as are differential equations whose derivatives don't become infinite.  Gamma is a mathematically principled answer to the overtraining problem in machine learning.
+
+In order to detect smoothness, Gamma needs precision data.  For category and small integer data, you should use traditional methods - traditional statistics is very good at category problems.  Gamma works on continuous data.  In practice this means that values should range across two or more full digits precision in all of your variables.  .
+
+Gamma can find causal relationships, including lags and embeddings for time series models.  It can also be used to tune the performance of neural networks. This package, 'sr',  provides the Gamma test along with a toolkit of search techniques that use it.
+
+
+## Installation
+
+You can install the development version of sr like so:
+
+``` r
+#  devtools::install_github("haythorn/sr")
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+library(sr)
+library(nnet)
+library(ggplot2)
+
+x <- embed(as.matrix(henon_x), 3)
+predictors <- x[ ,2:3]
+target <- x[ ,1]
+
+train_p <- predictors[1:600, ]
+test_p <- predictors[601:998, ]
+
+train_t <- target[1:600]
+test_t <- target[601:998]
+
+# train neural net to mean squared error determined by Gamma
+sum_squares <- gamma_test(train_p, train_t)$Gamma * length(t)
+gamma_model <- nnet(x = train_p, y = train_t, size = 8, rang = 0.1,
+                decay = 1e-5, maxit = 2000, abstol =  sum_squares)
+
+
+predicted <- predict(gamma_model, test_p, type = "raw")
+test_result <- data.frame(idx = 1:length(test_t), predicted[ ,1], test_t)
+colnames(test_result) <- c("idx", "predicted", "actual")
+
+ggplot(data = test_result[1:50, ]) +
+  geom_line(mapping = aes(x = idx, y = actual), color = "green") +
+  geom_line(mapping = aes(x = idx, y = predicted), color = "blue") +
+  geom_line(mapping = aes(x = idx, y = actual - predicted), color = "red") +
+  labs(y = "predicted over actual",
+      title = "Henon Model Using Gamma")
+
+```
+

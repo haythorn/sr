@@ -1,8 +1,8 @@
 ---
-title: "Smooth Regression for Time Series (1)"
+title: "Selecting Predictors with the Gamma Test"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{time_series_with_sr}
+  %\VignetteIndexEntry{Selecting Predictors with the Gamma Test}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,7 +23,7 @@ library(nnet)
 library(magrittr)
 ```
 
-## Selecting Predictors with the Gamma Test
+## 
 
 
 This vignette will introduce you to selecting good predictive inputs using the Gamma
@@ -109,7 +109,7 @@ To find the right embedding, we use an **increasing embedding search**.  This ta
 ```{r plot_increasing}
   increasing_search(predictors=predictors, 
                     target=targets,
-                    caption = "HenonX data")
+                    caption = "henon_x, 15 predictors")
 
 ```
 
@@ -167,7 +167,7 @@ The function get_Mlist computes Gamma for larger and larger portions of the data
 
   get_Mlist(predictors = p, 
             target = t, 
-            caption = "HenonMap.csv embedding 2")
+            caption = "henon_x, 2 predictors")
 
 ```
 
@@ -213,6 +213,16 @@ ggplot(data = test_result[1:50, ]) +
   labs(y = "predicted over actual",
       title = "Henon Model Test")
 
+
+
+```
+
+
+For a quick model built with the default parameters, this looks pretty good, but according to Gamma we should be able to to a lot better.  The model residuals are .64 and actual error on test data is .50, where Gamma says we should be getting .014.  
+
+
+
+```{r look_close}
 # Gamma estimate of noise sse
 train_gamma <- gamma_test(predictors = train_p, target = train_t)$Gamma
 train_gamma * length(train_t)
@@ -223,11 +233,9 @@ sum(n_model$residuals ^ 2)
 # sum of squared errors on test data
 with(test_result, sum((actual - predicted)^2))
 
-
 ```
 
 
-For a quick model built with the default parameters, this looks pretty good, but according to Gamma we should be able to to a lot better.  The model residuals are .64 and actual error on test data is .50, where Gamma says we should be getting .014.  
 
 This vignette is not going to go into detail about working between Gamma and neural net software, that deserves a vignette of its own, but we will make one pass at it here, to show you the general approach.  The Gamma test can be used with any neural net software that allows a mean squared error stopping condition for training.  nnet allows this with the abstol parameter. We will build a new net using this stopping condition, more hidden layer units, and a smaller decay parameter.  Decay is used to prevent overtraining, we have the Gamma test which is a more principled way to do that.  In general, when you adapt a model to Gamma, you will want to clear away a lot of stuff that's called "regularization", much of it is kludges that people have used because they didn't have a good mean squared error estimator, you do.
 
@@ -277,7 +285,311 @@ This does considerably better.  Gamma still says we can cut the error in half bu
   
   - **to evaluate the performance of a model** - Although our first model looked OK, given the complexity of what it had to model, the Gamma test told us that we could do better.  A mean squared error estimator tells you how well your model should do, so you know when you need to build another model.  
   
-  - **to prevent overtraining** - Learning algorithms are subject to overfitting.  Gamma does not work by minimizing some parameter, it directly measures the variance of the noise.  It is called the Gamma "test" because it directly tests for the presence of a smooth function.  This makes it a good complement to neural net learning algorithms and local linear regression.  
+  - **to prevent overtraining** - Learning algorithms are subject to overfitting.  Gamma does not work by minimizing some parameter, it directly measures the variance of the noise.  It is called the Gamma "test" because it directly tests for the presence of a smooth function.  This makes it a good complement to machine learning algorithms.  
   
 
-In the next (second) vignette, we will look at using Gamma with noisy data.
+We will look at several more examples in which we will put varying amounts of noise into the relationship between the predictors and the target.  
+
+
+
+## 2) Relationships with Noise
+
+The first example used the Henon Map with no noise.  This allowed us to see how the Gamma test responds to a deterministic relationship.  In the remaining examples, we will use a more complex function and put varying amounts of noise on the relationship.   As you will see, these examples are not realistic but they are mathematically clear, so you can easily judge the accuracy of the Gamma test.  
+
+
+
+### Mackey-Glass
+
+The function is the Mackey-Glass time delayed differential equation, a chaotic time series that is used to model biological systems.  Here's what it looks like on its own:
+
+
+
+```{r mgls,  fig.width = 8}
+
+str(mgls)
+
+data.frame(idx = 1:length(mgls), x = mgls) %>%
+  ggplot(data = .) +
+    geom_point(mapping = aes(x = idx, y = x),
+               shape = ".") +
+    labs(title = "mgls raw data")
+
+```
+
+This is what chaos looks like.  The regular edges show the action of the attractor, but of course they are only clues.  We get an increasing search and an M list:
+
+```{r embed_mgls}
+
+me <- embed(as.matrix(mgls), 13)
+pre <- me[ ,2:13]
+tar <- me[ ,1]
+
+```
+
+
+
+---
+  output: html_document
+---
+
+
+:::: {style="display: flex;"}
+
+::: {}
+
+
+```{r is_mg_raw}
+  increasing_search(predictors=pre, target=tar, caption="mgls, 12 predictors")
+
+```
+
+
+:::
+
+::: {}
+
+
+```{r gm_mg_raw}
+  get_Mlist(predictors = pre, target = tar, by = 100, caption="mgls, 12 predictors")
+
+```
+
+:::
+
+::::
+
+This is definitive.  The function is in fact driven by the first four lags, and Gamma has shown again that it can reliably detect smooth predictive relationships in data.  
+
+
+
+### Mackey-Glass with Noise
+
+
+We're going to look at two levels of noise, one which is about half the variance of the signal and the second about equal to the signal.  We're going to do this in an unnatural way, by adding a random variable to the target only:
+
+
+```{r mgls_add_noise}
+
+
+
+# target plus noise at tw
+t1 <- tar + rnorm(length(tar), 
+                  mean = mean(tar), 
+                  sd = sqrt(.04))
+
+t2 <- tar + rnorm(length(tar), 
+                  mean = mean(tar), 
+                  sd = sqrt(.075))
+
+vraw <- var(tar)
+vraw
+gamma_test(pre, t1)  # noise var=.04 added
+gamma_test(pre, t2)  # noise var=.75 added
+
+```
+
+
+You can see from this that the Gamma test estimate of noise in a data relationship is quite accurate, of course we are using about twice as much data as the M test tells us we need:
+
+
+
+---
+  output: html_document
+---
+
+
+:::: {style="display: flex;"}
+
+::: {}
+
+#### var = .04 noise
+
+```{r Mlist_040}
+  get_Mlist(pre, t1, caption="mgls by 12, .04 noise on output")
+
+```
+
+
+:::
+
+::: {}
+
+#### var = .075 noise
+
+```{r mlist_075}
+  get_Mlist(pre, t2, caption="mgls by 12, .075 noise on output")
+
+```
+
+:::
+
+::::
+
+You probably have already noticed why I said this is an unrealistic example.  I added noise to the target column only.  Since the target column is arbitrary based on the embedding, this doesn't represent a real time series.  What it does correspond to is the meaning of the "noise in a relationship".  The t2 model does have an error variance of .075, and that would be the mean squared error of the best neural net we can build on that data.  So the usefulness of doing it that way is that we know the answer that the Gamma test is supposed to find.
+
+We want to distinguish between the noise on the relationship and the noise in individual measurements.   If we add .04 noise to mgls before doing the embedding, we would have noise on both the inputs and the outputs, and the error in the relationship would be somewhere around a sum of the variances of the dimensions in the model.  We can see this with a simple example.  Suppose we have a function y <- x, and we put.04  noise on both terms.  The mean squared error of the prediction will be close to .08.
+
+```{r simple_noise}
+
+x <- mgls
+
+y <- x + rnorm(length(mgls), mean = mean(mgls), sd = sqrt(.04))
+x <- x + rnorm(length(mgls), mean = mean(mgls), sd = sqrt(.04))
+
+mse <- sum((y - x)^2) / length(x)
+mse
+
+```
+
+The way these variances combine depends on the function, and if we knew what the function is we wouldn't be using the Gamma test.  So if there is noise on the inputs, even if we put it there, we don't know the noise on relationship, Gamma is the only measurement we have of the actual strength of the relationship.
+
+
+```{r noise_everywhere}
+mg <- mgls + rnorm(length(mgls), mean = mean(mgls), sd = sqrt(.04))
+mge <- embed(mg, 13)
+pn <- mge[ ,2:13]
+tn <- mge[ ,1]
+```
+
+
+---
+  output: html_document
+---
+
+
+:::: {style="display: flex;"}
+
+::: {}
+
+
+
+#### var = .04 noise on all points
+```{r is_with_noise}
+
+  increasing_search(pn, tn, caption="mgls by 12, .04 noise on all points")
+
+```
+
+
+:::
+
+::: {}
+
+#### var = .040 noise on all points
+
+```{r gM_with_noise}
+
+  get_Mlist(pn, tn, caption="mgls by 12, .040 noise on all points")
+
+```
+
+:::
+
+::::
+
+
+```{r followinup}
+gamma_test(pn, tn)
+```
+
+
+Gamma is considerably higher than .04, and neither the increasing_search nor the M list show clear signs of converging.  Looking at the model without noise, we see that each point can be predicted from the four previous points, but under conditions of noise, a better model can be found as a function of many more inputs.  One of the consequences of the Gamma test mathematics is a proof that when there is noise on the inputs, the best predictive model is generally not the true model.  Antonia Jones, the principal author of the Gamma test, said this had "disturbing implications for our understanding of the world".  In this case, if the lag 4 point is obscured by noise, but it's value is strongly influenced by lag 5, then knowing lag 5 helps us predict the next point by an indirect connection. 
+
+
+## 3) Just plain noise
+
+
+What happens if we apply Gamma to normally distributed random noise?
+
+```{r noise_only}
+noise <- rnorm(5000)
+
+e_noise <- embed(noise, 15+1)
+n_target <- e_noise[ , 1]
+n_predictors <- e_noise[ , 2:(15+1) ]
+
+```
+
+---
+  output: html_document
+---
+
+### Random noise
+
+
+:::: {style="display: flex;"}
+
+::: {}
+
+
+```{r noise_is}
+increasing_search(n_predictors, 
+                  n_target, 
+                  caption = "random variable")
+
+```
+
+:::
+
+::: {}
+
+```{r noise_Ml}
+  get_Mlist(predictors = n_predictors, 
+            target = n_target, 
+            by = 100, 
+            caption = "randomw variable")
+```
+
+:::
+
+::::
+
+All the embeddings show Gamma close to 1, and this M list seems to be converging there.
+
+
+### Summary:
+
+**The second and third examples made one important point:**
+
+  - **Gamma correctly estimates noise, against unknown smooth functions, over the range from 0 to 1** - We demonstrated Gamma accurately measuring the noise in five cases, in which we knew the actual noise that had been added.  There were tThe ratios of noise to total variance were 0, 0, .34, .49, and 1.  The Gamma estimate was very close in all these cases, even though for all of them the underlying causal relationship was chaotic.  Gamma estimates mean squared error against smooth functions as a class, that is, against all smooth functions simultaneously. 
+  
+  
+
+## Appendix: Looking under the hood at Gamma
+
+The gamma_test function has a plot option that allows us to see how the near neighbor search relates to the computation of Gamma.  We will look at the noise cases first.
+
+
+### The pure noise case:
+
+```{r pure_noise_plot}
+gamma_test(n_predictors, n_target, plot = TRUE, caption = "random variable")
+```
+
+The black dots are the distances in output space (y) plotted against distances to near neighbors in the input space (x) .  The red dots are the average distances for the first, second, third and so on nearest neighbors.  The Gamma regression line in blue is drawn using the squares of those averages.  As data density increases, the y intercept of the gamma regression line converges on the noise variance.
+
+In this plot we see pure noise.  The distances to near neighbors in output space have no relation to the distance in input space.  The Gamma regression line is horizontal, the y intercept is at 1, and the vratio is 1.  Gamma is telling us, correctly, that all of the variance in this data comes from noise, the predictors have no smooth relationship with the target. 
+
+
+### Mixed causality and noise:
+
+```{r mixed_plot}
+gamma_test(predictors=pre, target=t1, plot = TRUE, caption = "mixed causality and noise")
+```
+  
+This plot shows causality with noise.  In real world data the noise would be caused by measurement error or causal variables that are not being measured.  In the plot, the Gamma regression line has positive slope and the y intercept is well below 1, indicating the presence of a smooth relationship, The intercept is above 0, indicating the presence of noise.  The vration is 0.19, so estimated noise is 19% of the sample variance.
+
+
+### Henon with no noise:
+
+```{r no_noise_plot}
+  dim <- ncol(henon_embedded)
+  p <- henon_embedded[ ,2:dim]
+  t <- henon_embedded[ ,1]
+  gamma_test(predictors = p, target = t, plot = TRUE, caption = "Deterministic function")
+
+```
+
+The gamma regression line has positive slope and its intercept is zero, showing that the inputs and output are related by an unknown smooth function.  This triangular shape of the delta-gamma graph shows that smooth function.  If this were a linear function, change in delta would be linearly related to change in gamma, so all of the black points would lie on a line.  Instead, because the function has curvature, points lie above and below the line.  Between a point and its near neighbors, either the deltas or gammas change more rapidly, the curve separates from the tangen, producing the spray of points seen here. 
+
+

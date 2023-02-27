@@ -6,7 +6,12 @@ test_that("increasing search works", {
   # plot is stable so calculation is stable
   vdiffr::expect_doppelganger("standard increasing search", increasing_search(p,t, caption="test plot"))
 
-  # vector input is not accepted
+  vdiffr::expect_doppelganger("increasing search vratios", increasing_search(p,t,
+                                                                              caption="test plot",
+                                                                              show="vratio"))
+
+
+    # vector input is not accepted
   p1 <- as.vector(select_by_mask(p,int_to_intMask(1,8)))
   expect_error(increasing_search(p1, t))
 

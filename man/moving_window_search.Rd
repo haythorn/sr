@@ -10,7 +10,8 @@ moving_window_search(
   window_size = 40,
   by = 1,
   plot = TRUE,
-  caption = ""
+  caption = "",
+  show = "Gamma"
 )
 }
 \arguments{
@@ -26,6 +27,9 @@ to a predictive function}
 \item{plot}{Logical, set this to FALSE if you don't want the plot}
 
 \item{caption}{Character string, caption for plot}
+
+\item{show}{Character string, if it equals "vratio", vratios will be plotted,
+otherwise Gamma is plotted}
 }
 \value{
 An invisible data frame containing starting and ending positions of
