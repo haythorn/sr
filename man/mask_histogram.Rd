@@ -27,13 +27,15 @@ useful as you might think - it doesn't show interactions between predictors,
 for mask selection it would only work for linear combinations of inputs.
 }
 \examples{
-e2_embed6 <- embed(example2_data, 9)
+\dontrun{
+e2_embed6 <- embed(mgls, 9)
 t <- e2_embed6[ ,1]
 p <- e2_embed6[ ,2:9]
 full_search <- fe_search(predictors = p, target = t)
-goodies <- full_search[1:10, ]
+goodies <- head(full_search, 20)
 mask_histogram(goodies, 8, caption = "mask bits in top 10 Gammas")
 
-baddies <- tail(full_search, 10)
+baddies <- tail(full_search, 20)
 mask_histogram(baddies, 8, caption = "bits appearing in 10 worst gammas")
+}
 }

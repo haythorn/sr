@@ -35,11 +35,13 @@ otherwise Gamma is plotted}
 \item{by}{Integer increment in lengths of successive windows, passed to seq}
 }
 \value{
-An invisible data frame containing Gamma values, vratios and the
-length of the associated data set
+An invisible data frame containing Gamma values, vratios and M, the
+length of the associated subset of the data.
 }
 \description{
-Produces a list of M values (sample sizes), and the associated Gammas
+Produces a list of M values (sample sizes), and the associated Gammas. The
+graph will become stable when the sample size is large enough. The function
+produces a graph by default, and also returns a data.frame.
 }
 \examples{
 he <- embed(henon_x, 17)

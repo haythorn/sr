@@ -23,9 +23,11 @@ in the predictors.  For example, it this histogram is bimodal, there is probably
 one input variable which is absolutely required for a good predictive function.
 }
 \examples{
-e2_embed6 <- embed(example2_data, 7)
+\dontrun{
+e2_embed6 <- embed(mgls, 7)
 t <- e2_embed6[ ,1]
 p <- e2_embed6[ ,2:7]
 full_search <- fe_search(predictors = p, target = t)
 gamma_histogram(full_search, caption = "my data")
+}
 }

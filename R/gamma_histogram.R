@@ -13,11 +13,13 @@
 #' @param bins Numeric, number of bins in the histogram
 #' @param caption Character string caption for the plot
 #' @examples
-#' e2_embed6 <- embed(example2_data, 7)
+#' \dontrun{
+#' e2_embed6 <- embed(mgls, 7)
 #' t <- e2_embed6[ ,1]
 #' p <- e2_embed6[ ,2:7]
 #' full_search <- fe_search(predictors = p, target = t)
 #' gamma_histogram(full_search, caption = "my data")
+#' }
 #===========================================================
 gamma_histogram <- function(fe_results, bins = 100, caption = "")
   #===========================================================

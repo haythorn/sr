@@ -1,6 +1,8 @@
 #' Discover how Gamma varies with sample size
 #'
-#' Produces a list of M values (sample sizes), and the associated Gammas
+#' Produces a list of M values (sample sizes), and the associated Gammas. The
+#' graph will become stable when the sample size is large enough. The function
+#' produces a graph by default, and also returns a data.frame.
 #' @export
 #' @param predictors A Numeric vector or matrix whose columns are proposed
 #' inputs to a predictive relationship
@@ -12,8 +14,8 @@
 #' @param from Integer length of the first data sample, as passed to seq
 #' @param by Integer increment in lengths of successive windows, passed to seq
 #' @param to Integer maximum length of sample to test, passed to seq
-#' @return An invisible data frame containing Gamma values, vratios and the
-#' length of the associated data set
+#' @return An invisible data frame containing Gamma values, vratios and M, the
+#' length of the associated subset of the data.
 #' @examples
 #' he <- embed(henon_x, 17)
 #' t <- he[ , 1]

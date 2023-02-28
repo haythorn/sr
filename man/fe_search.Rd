@@ -46,8 +46,10 @@ full_embedding_search(), which displays timing estimates and a histogram of
 the outputs.
 }
 \examples{
-e2_embed6 <- embed(example2_data, 7)
+\dontrun{
+e2_embed6 <- embed(mgls, 7)
 t <- e2_embed6[ ,1]
 p <- e2_embed6[ ,2:7]
 full_search <- fe_search(predictors = p, target = t)
+}
 }
