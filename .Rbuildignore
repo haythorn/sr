@@ -3,4 +3,7 @@
 ^vignettes/Notes\.Rmd$
 ^README\.Rmd$
 ^cran-comments\.md$
+<<<<<<< HEAD
 ^\.github$
+=======
+>>>>>>> 532a3143e040735113e74e0bc5e5682c25d1c5ab
