@@ -1,6 +1,6 @@
 Package: sr
 Type: Package
-Title: Smooth Regression - the Gamma test and tools 
+Title: Smooth Regression - the Gamma Test and Tools 
 Version: 0.1.0
 Author: Wayne Haythorn, based on work by Sam Kemp and Antonia Jones
 Maintainer: Wayne Haythorn <support@smoothregression.com>
@@ -27,13 +27,13 @@ Imports:
     ggplot2,
     progress,
     RANN,
-    stats,
-    vdiffr
+    stats
 Suggests: 
     knitr,
     magrittr,
     nnet,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    vdiffr
 URL: https://github.com/haythorn/sr
 BugReports: https://github.com/haythorn/sr/issues
