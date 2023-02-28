@@ -35,37 +35,57 @@ You can install the development version of sr like so:
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This example shows the creation of an embedding on a time series, division of the data into training and test subsets, using `gamma_test` to control learning and prevent overtraining in a neural network, and displaying the results.  This example is explained in detail in the time_series vignette.
 
-```{r example}
+```{r setup_example, include=FALSE}
+library(sr)
+scale01 <- function(x) {
+  maxx <- max(x)
+  minx <- min(x)
+  return(scale(x,
+               center = minx,
+               scale = maxx - minx))
+}
+hs <- scale01(henon_x)
+
+```
+
+
+```{r example, fig.width = 6, fig.height = 3.5}
 library(sr)
 library(nnet)
 library(ggplot2)
 
-x <- embed(as.matrix(henon_x), 3)
-predictors <- x[ ,2:3]
+
+x <- embed(as.matrix(hs), 3)   #hs is a time series
+
 target <- x[ ,1]
-
-train_p <- predictors[1:600, ]
-test_p <- predictors[601:998, ]
-
 train_t <- target[1:600]
-test_t <- target[601:998]
+test_t <-  target[601:998]
 
-# train neural net to mean squared error determined by Gamma
+predictors <- x[ ,2:3]
+train_p <- predictors[1:600, ]
+test_p  <- predictors[601:998, ]
+
+# train a neural net, using Gamma to control the training
 sum_squares <- gamma_test(train_p, train_t)$Gamma * length(t)
+
 gamma_model <- nnet(x = train_p, y = train_t, size = 8, rang = 0.1,
                 decay = 1e-5, maxit = 2000, abstol =  sum_squares)
 
 
+# how does the model do on test data?
 predicted <- predict(gamma_model, test_p, type = "raw")
 test_result <- data.frame(idx = 1:length(test_t), predicted[ ,1], test_t)
 colnames(test_result) <- c("idx", "predicted", "actual")
 
 ggplot(data = test_result[1:50, ]) +
-  geom_line(mapping = aes(x = idx, y = actual), color = "green") +
-  geom_line(mapping = aes(x = idx, y = predicted), color = "blue") +
-  geom_line(mapping = aes(x = idx, y = actual - predicted), color = "red") +
+  geom_line(mapping = aes(x = idx, y = actual, color = "green")) +
+  geom_line(mapping = aes(x = idx, y = predicted, color = "blue")) +
+  geom_line(mapping = aes(x = idx, y = actual - predicted, color = "red")) +
+  scale_colour_manual(name = 'sequence', 
+         values =c('green'='green', 'blue'='blue','red'='red'), 
+         labels = c('predicted', 'actual', 'error' )) +
   labs(y = "predicted over actual",
       title = "Henon Model Using Gamma")
 

@@ -32,10 +32,12 @@
 #' the predictors, and the value of Gamma using those predictors and the target.
 #' This is sorted from lowest to highest Gamma.
 #' @examples
-#' e2_embed6 <- embed(example2_data, 7)
+#' \dontrun{
+#' e2_embed6 <- embed(mgls, 7)
 #' t <- e2_embed6[ ,1]
 #' p <- e2_embed6[ ,2:7]
 #' full_search <- fe_search(predictors = p, target = t)
+#' }
 fe_search <- function(predictors,
                       target,
                       prog_bar = TRUE,
