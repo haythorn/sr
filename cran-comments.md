@@ -17,7 +17,8 @@ There was one NOTE when I ran:
    Found the following files/directories:
      'lastMiKTeXException'"
      
-   As noted in R-hub issue #503, this could be due to a bug/crash in MiKTeX
+   As noted in R-hub issue #503, this could be due to a bug/crash in MiKTeX:
+      https://github.com/r-hub/rhub/issues/503
 
 ## This is an initial submission. 
 There are no downstream dependencies.
