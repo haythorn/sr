@@ -35,7 +35,15 @@ You can install the development version of sr like so:
 
 ## Example
 
-This example shows the creation of an embedding on a time series, division of the data into training and test subsets, using `gamma_test` to control learning and prevent overtraining in a neural network, and displaying the results.  This example is explained in detail in the time_series vignette.
+This example shows the Gamma test used to control the training of a neural network, to get an optimally accurate model without over-training.  The example shows 
+
+- the creation of an embedding on a time series, 
+- division of the data into training and test subsets, 
+- calling `gamma_test` to get a target mean squared error, 
+- training and testing the neural net to that target, and 
+- displaying the results. 
+
+This example is explained in detail in the time_series vignette.
 
 ```{r setup_example, include=FALSE}
 library(sr)
