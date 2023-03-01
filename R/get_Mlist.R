@@ -17,12 +17,10 @@
 #' @return An invisible data frame containing Gamma values, vratios and M, the
 #' length of the associated subset of the data.
 #' @examples
-#' he <- embed(henon_x, 17)
+#' he <- embed(henon_x, 13)
 #' t <- he[ , 1]
-#' p <- he[ ,2:17]
-#' ml <- get_Mlist(p, t)
+#' p <- he[ ,2:13]
 #' get_Mlist(p, t, caption = "this data")
-#' ml <- get_Mlist(p, t, plot = FALSE)
 #===========================================================
 get_Mlist <- function(predictors,
                       target,
