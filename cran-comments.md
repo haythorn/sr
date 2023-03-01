@@ -8,6 +8,27 @@ date: "2023-02-28"
 There are no downstream dependencies.
 There are no side effects other than multiple calls to ggplot.
 
+## This is a resubmission.  There were two notes on the previous submission.
+
+  These were:
+
+```  
+N  checking CRAN incoming feasibility
+   Maintainer: 'Wayne Haythorn <support@smoothregression.com>'
+   
+   New submission
+```
+     And
+
+```
+     * checking package subdirectories ... NOTE
+Problems with news in 'NEWS.md':
+No news entries found.
+
+```
+     
+  Response: I removed a bad character from my NEWS.md file
+
 
 ## R CMD check results
 
@@ -19,6 +40,7 @@ There are no side effects other than multiple calls to ggplot.
   - `rhub::check()` with ubuntu-gcc-devel
   -   debian-clang-devel
   -   windows-x86_64-devel
+  
   
 ### There were two NOTEs using `devtools::check_rhub()
   
