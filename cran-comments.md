@@ -49,5 +49,6 @@ There are no side effects other than multiple calls to ggplot.
             missing value where TRUE/FALSE needed
 ```
         
-Response::I've done some looking on stackoverflow.  The little that I've found makes me think these are both issues with the installing platform.  I have sent an email to Uwe Ligges so we can resolve these issues.  
+
+Response: Even in this platform the build was successful.  I ran successful checks on two other development platforms.  I've looked for this installer error on stackoverflow  and the little that I've found makes me think these are both issues with the installing platform.  I have sent an email to Uwe Ligges so we can resolve these issues.  
 
