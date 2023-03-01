@@ -1,6 +1,6 @@
 Package: sr
 Type: Package
-Title: Smooth Regression - the Gamma Test and Tools 
+Title: Smooth Regression - The Gamma Test and Tools 
 Version: 0.1.0
 Author: Wayne Haythorn, based on work by Sam Kemp and Antonia Jones
 Maintainer: Wayne Haythorn <support@smoothregression.com>
@@ -12,7 +12,7 @@ Description: Tools for finding causal relations in precision data.  Smooth
   it is given. Gamma and search tools are used to identify causal relations, find 
   lags and embeddings in time series analysis, decide how much data is needed 
   to build a stable model, evaluate the performance of a model, and prevent 
-  overtraining.
+  over training.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
@@ -33,6 +33,6 @@ Suggests:
     magrittr,
     nnet,
     rmarkdown,
-    testthat (>= 3.0.0),
+    testthat (>= 3.0.0)
 URL: https://github.com/haythorn/sr
 BugReports: https://github.com/haythorn/sr/issues
