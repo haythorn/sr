@@ -21,13 +21,15 @@ There are no side effects other than multiple calls to ggplot.
   
   These were:
   
-     `Possibly misspelled words in DESCRIPTION: embeddings (13:12)`
+     ` Possibly misspelled words in DESCRIPTION: embeddings (13:12) `
      
       Response: This word is not misspelled.
     
-    ```checking for detritus in the temp directory
+```
+      checking for detritus in the temp directory
        Found the following files/directories:
-        'lastMiKTeXException' ```
+        'lastMiKTeXException' 
+```
      
      Response: As noted in R-hub issue #503, this could be due to a bug/crash in MiKTeX:
         https://github.com/r-hub/rhub/issues/503
