@@ -29,5 +29,5 @@ gamma_test(predictors = p, target = tn)
 
 msk <- int_to_intMask(15, 12)     # pick out the first four columns
 p <- select_by_mask(pn, msk)
-get_Mlist(predictors = p, target = tn, by = 50)
+gamma_test(predictors = p, target = tn)
 }

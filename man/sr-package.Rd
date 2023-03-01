@@ -4,9 +4,9 @@
 \name{sr-package}
 \alias{sr}
 \alias{sr-package}
-\title{sr: Smooth Regression - the Gamma Test and Tools}
+\title{sr: Smooth Regression - The Gamma Test and Tools}
 \description{
-Tools for finding causal relations in precision data. Smooth regression is based on the Gamma test, which measures the noise in a data relationship relative to all smooth models, thus all neural network models and differential equations with bounded (finite) derivatives. Gamma estimates the mean squared error of the best smooth model that can be built on the data it is given. Gamma and search tools are used to identify causal relations, find lags and embeddings in time series analysis, decide how much data is needed to build a stable model, evaluate the performance of a model, and prevent overtraining.
+Tools for finding causal relations in precision data. Smooth regression is based on the Gamma test, which measures the noise in a data relationship relative to all smooth models, thus all neural network models and differential equations with bounded (finite) derivatives. Gamma estimates the mean squared error of the best smooth model that can be built on the data it is given. Gamma and search tools are used to identify causal relations, find lags and embeddings in time series analysis, decide how much data is needed to build a stable model, evaluate the performance of a model, and prevent over training.
 }
 \seealso{
 Useful links:
