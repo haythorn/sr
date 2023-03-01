@@ -20,10 +20,12 @@ There are no side effects other than multiple calls to ggplot.
 ### There were two NOTEs using `rhub::check_rhub()`
   
   These were:
-  
-     ` Possibly misspelled words in DESCRIPTION: embeddings (13:12) `
+
+```  
+      Possibly misspelled words in DESCRIPTION: embeddings (13:12)
+```
      
-      Response: This word is not misspelled.
+   Response: This is the correct spelling of embeddings.
     
 ```
       checking for detritus in the temp directory
@@ -31,7 +33,7 @@ There are no side effects other than multiple calls to ggplot.
         'lastMiKTeXException' 
 ```
      
-     Response: As noted in R-hub issue #503, this could be due to a bug/crash in MiKTeX:
+  Response: As noted in R-hub issue #503, this could be due to a bug/crash in MiKTeX:
         https://github.com/r-hub/rhub/issues/503
 
 ### There were multiple WARNINGs and one ERROR using `devtools::check_win_devel()`
@@ -40,8 +42,10 @@ There are no side effects other than multiple calls to ggplot.
         `Warning in as.POSIXlt.POSIXct(x, tz) : unknown timezone 'GMT'`
         
   2) There was an installer error:
-        ```Error in if (file.size(codeFile) == file.size(loaderFile)) warning("package             seems to be using lazy loading already") else { : 
-        missing value where TRUE/FALSE needed```
+```
+        Error in if (file.size(codeFile) == file.size(loaderFile)) warning("package             seems to be using lazy loading already") else { : 
+            missing value where TRUE/FALSE needed
+```
         
-I've done some looking on stackoverflow.  The little that I've found makes me think these are both issues with the development platform.  I have sent an email to Uwe Ligges so we can resolve them.  
+      Response::I've done some looking on stackoverflow.  The little that I've found makes me think these are both issues with the development platform.  I have sent an email to Uwe Ligges so we can resolve them.  
 
