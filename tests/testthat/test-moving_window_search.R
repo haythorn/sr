@@ -8,6 +8,7 @@ test_that("moving_window_search works", {
   p <- pt$p
   t <- pt$t
 
+  skip_on_cran()
   # plot
   vdiffr::expect_doppelganger("moving window works",
                               moving_window_search(p,t,

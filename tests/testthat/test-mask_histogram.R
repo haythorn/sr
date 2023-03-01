@@ -1,6 +1,7 @@
 test_that("tests fe_search and mask_histogram", {
   # compare some results (one fe_search, multiple samples)
   skip_on_cran()
+
   me <- embed(mgls, 11)
   t <- me[ ,1]
   p <- me[ ,2:11]

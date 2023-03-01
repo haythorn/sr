@@ -4,9 +4,6 @@ test_that("gamma_test works", {
   p <- pt$p
   t <- pt$t
 
-  # plot is stable
-  vdiffr::expect_doppelganger("gamma test plot", gamma_test(p,t, plot=TRUE, caption="test plot"))
-
   # data.frame input equals matrix
   ml <- gamma_test(p,t)
   expect_equal(gamma_test(as.data.frame(p), t), ml)
@@ -18,4 +15,9 @@ test_that("gamma_test works", {
 
   # file lengths wrong
   # verbose output
+  skip_on_cran()
+  # plot is stable
+  vdiffr::expect_doppelganger("gamma test plot", gamma_test(p,t, plot=TRUE, caption="test plot"))
+
+
 })
