@@ -27,12 +27,12 @@ Imports:
     progress,
     RANN,
     stats
+    vdiffr
 Suggests: 
     knitr,
     magrittr,
     nnet,
     rmarkdown,
     testthat (>= 3.0.0),
-    vdiffr
 URL: https://github.com/haythorn/sr
 BugReports: https://github.com/haythorn/sr/issues
