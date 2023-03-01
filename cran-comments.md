@@ -42,10 +42,11 @@ There are no side effects other than multiple calls to ggplot.
         `Warning in as.POSIXlt.POSIXct(x, tz) : unknown timezone 'GMT'`
         
   2) There was an installer error:
+  
 ```
-        Error in if (file.size(codeFile) == file.size(loaderFile)) warning("package             seems to be using lazy loading already") else { : 
+        Error in if (file.size(codeFile) == file.size(loaderFile)) warning("package  seems to be using lazy loading already") else { : 
             missing value where TRUE/FALSE needed
 ```
         
-      Response::I've done some looking on stackoverflow.  The little that I've found makes me think these are both issues with the development platform.  I have sent an email to Uwe Ligges so we can resolve them.  
+Response::I've done some looking on stackoverflow.  The little that I've found makes me think these are both issues with the development platform.  I have sent an email to Uwe Ligges so we can resolve them.  
 
