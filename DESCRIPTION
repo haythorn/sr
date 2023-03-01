@@ -26,7 +26,7 @@ Imports:
     ggplot2,
     progress,
     RANN,
-    stats
+    stats,
     vdiffr
 Suggests: 
     knitr,
