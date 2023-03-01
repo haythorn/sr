@@ -20,16 +20,18 @@ There are no side effects other than multiple calls to ggplot.
   -   debian-clang-devel
   -   windows-x86_64-devel
   
-### There were two NOTEs using `rhub::check_rhub()
+### There were two NOTEs using `devtools::check_rhub()
   
   These were:
 
 ```  
-      Possibly misspelled words in DESCRIPTION: embeddings (13:12)
+N  checking CRAN incoming feasibility
+   Maintainer: 'Wayne Haythorn <support@smoothregression.com>'
+   
+   New submission
 ```
-     
-   Response: This is the correct spelling of embeddings.
-    
+     And
+
 ```
       checking for detritus in the temp directory
        Found the following files/directories:
