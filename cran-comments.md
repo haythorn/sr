@@ -11,11 +11,12 @@ There are no side effects other than multiple calls to ggplot.
 
 ## R CMD check results
 
-### There were no ERRORs, WARNINGs, or NOTES, using:
+### There were no ERRORs, WARNINGs, or NOTES, using 6 platforms:
   - `devtools::check()    # on my local windows 11 laptop`
   - `devtools::check_on_windows()`
   - `devtools::check_mac_release()`
   - `rhub::check_on_linux()`
+  - `rhub::check()` with ubuntu-gcc-devel and debian-clang-devel 
   
 ### There were two NOTEs using `rhub::check_rhub()`
   
@@ -48,5 +49,5 @@ There are no side effects other than multiple calls to ggplot.
             missing value where TRUE/FALSE needed
 ```
         
-Response::I've done some looking on stackoverflow.  The little that I've found makes me think these are both issues with the development platform.  I have sent an email to Uwe Ligges so we can resolve them.  
+Response::I've done some looking on stackoverflow.  The little that I've found makes me think these are both issues with the installing platform.  I have sent an email to Uwe Ligges so we can resolve these issues.  
 
