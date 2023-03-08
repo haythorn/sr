@@ -6,13 +6,28 @@
 \alias{sr-package}
 \title{sr: Smooth Regression - The Gamma Test and Tools}
 \description{
-Tools for finding causal relations in precision data. Smooth regression is based on the Gamma test, which measures the noise in a data relationship relative to all smooth models, thus all neural network models and differential equations with bounded (finite) derivatives. Gamma estimates the mean squared error of the best smooth model that can be built on the data it is given. Gamma and search tools are used to identify causal relations, find lags and embeddings in time series analysis, decide how much data is needed to build a stable model, evaluate the performance of a model, and prevent over training.
+Finds causal connections in precision data, finds lags and embeddings in time series, guides and evaluates the performance of neural networks and other smooth models, gives a mathematically sound answer to the over-training problem. Smooth regression is based on the Gamma test, which measures smoothness in a multivariate relationship. 'sr' includes the Gamma test and search techniques that use it. See references in the help for function `gamma_test`.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/haythorn/sr}
+  \item \url{https://smoothregression.com}
+  \item \url{https://github.com/haythorn/sr/}
   \item Report bugs at \url{https://github.com/haythorn/sr/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Wayne Haythorn \email{support@smoothregression.com}
+
+Authors:
+\itemize{
+  \item Antonia Jones (Principal creator of the Gamma test)
+}
+
+Other contributors:
+\itemize{
+  \item Sam Kemp (Wrote the original code for the Gamma test in R) [contributor]
 }
 
 }

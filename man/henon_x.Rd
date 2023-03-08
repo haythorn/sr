@@ -20,6 +20,6 @@ predictors <- henon_embedded[ ,2:3]
 gamma_test(predictors, targets)
 }
 \references{
-See Wikipedia entry on "Hénon map"
+See Wikipedia entry on "Henon map"
 }
 \keyword{datasets}

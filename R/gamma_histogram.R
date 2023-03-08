@@ -8,18 +8,18 @@
 #' one input variable which is absolutely required for a good predictive function.
 #' @export
 #' @param fe_results The result of fe_search or full_embedding_search.  A matrix
-#' containing a column labeled x, of Numeric gamma values.
+#' containing a column labeled Gamma, of Numeric Gamma values.
 #' It also contains an integer column of masks, but that is not used by this function.
 #' @param bins Numeric, number of bins in the histogram
 #' @param caption Character string caption for the plot
+#' @return a ggplot object, a histogram showing the distribution of Gamma values
+#' full embedding search output
 #' @examples
-#' \dontrun{
-#' e2_embed6 <- embed(mgls, 7)
-#' t <- e2_embed6[ ,1]
-#' p <- e2_embed6[ ,2:7]
+#' e6 <- embed(mgls, 7)
+#' t <- e6[ ,1]
+#' p <- e6[ ,2:7]
 #' full_search <- fe_search(predictors = p, target = t)
 #' gamma_histogram(full_search, caption = "my data")
-#' }
 #===========================================================
 gamma_histogram <- function(fe_results, bins = 100, caption = "")
   #===========================================================

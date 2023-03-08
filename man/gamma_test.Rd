@@ -49,3 +49,8 @@ t <- he[ , 1]
 p <- he[ ,2:3]
 gamma_test(predictors = p, target = t)
 }
+\references{
+\url{https://royalsocietypublishing.org/doi/10.1098/rspa.2002.1010},
+\url{https://link.springer.com/article/10.1007/s10287-003-0006-1},
+\url{https://smoothregression.com}
+}

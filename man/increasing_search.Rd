@@ -13,7 +13,8 @@ increasing_search(
 )
 }
 \arguments{
-\item{predictors}{A vector or matrix whose columns are proposed inputs to a predictive function}
+\item{predictors}{A vector or matrix whose columns are proposed inputs to a
+predictive function}
 
 \item{target}{A vector of double, the output variable that is to be predicted}
 
@@ -25,7 +26,9 @@ increasing_search(
 otherwise Gamma is plotted}
 }
 \value{
-An invisible data frame showing the depth of search and associated Gamma
+An invisible data frame with three columns, Depth of search, from
+1 to ncol(predictors), Gamma calculated using columns 1:Depth as predictors,
+and vratio corresponding to that Gamma (Gamma / var(target))
 }
 \description{
 Adds variables one at a time to the input set, to see how many are needed for prediction.
@@ -38,9 +41,9 @@ search adds previous values one at a time, and saves the resulting gammas.  Thes
 results can be examined using plot_increasing_search()
 }
 \examples{
-he <- embed(henon_x, 17)
+he <- embed(henon_x, 13)
 t <- he[ , 1]
-p <- he[ ,2:17]
+p <- he[ ,2:13]
 increasing_search(p, t, caption = "henon data embedded 16")
 df <- increasing_search(predictors=p, target=t, plot = FALSE)
 }

@@ -8,7 +8,7 @@
 #'
 #' @keywords datasets
 #'
-#' @references See Wikipedia entry on "Hénon map"
+#' @references See Wikipedia entry on "Henon map"
 #'
 #' @examples
 #' henon_embedded <- embed(as.matrix(henon_x), 3)

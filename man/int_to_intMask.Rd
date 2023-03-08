@@ -30,5 +30,5 @@ t <- he[ , 1]
 p <- he[ ,2:17]
 mask <- int_to_intMask(7, 16)     # pick out the first three columns
 pn <- select_by_mask(p, mask)
-get_Mlist(predictors = pn, target = t, by = 50)
+gamma_test(predictors = pn, target = t)
 }

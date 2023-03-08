@@ -47,5 +47,5 @@ produces a graph by default, and also returns a data.frame.
 he <- embed(henon_x, 13)
 t <- he[ , 1]
 p <- he[ ,2:13]
-get_Mlist(p, t, caption = "this data")
+get_Mlist(p, t, by = 2, caption = "this data")
 }

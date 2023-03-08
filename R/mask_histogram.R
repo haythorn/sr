@@ -10,23 +10,24 @@
 #'
 #' @export
 #' @param fe_result Output data frame from fe_search.  Normally you would filter
-#' this by, for example, selecting the top 100 results from that output
+#' this by, for example, selecting the top 100 results from that output.  If the
+#' whole fe_search result was passed in, all of the mask bits would have the same
+#' frequency and the histogram would be flat.
 #' @param dimension Integer number of effective columns in a mask, ncol of the
 #' predictors given to the search
 #' @param tick_step Integer, where to put ticks on the x axis
 #' @param caption A character string you can use to identify this graph
+#' @return A ggplot object, a histogram showing the mask bits used in the fe_search
+#' results that are passed to it
 #' @examples
-#' \dontrun{
-#' e2_embed6 <- embed(mgls, 9)
-#' t <- e2_embed6[ ,1]
-#' p <- e2_embed6[ ,2:9]
+#' e6 <- embed(mgls, 7)
+#' t <- e6[ ,1]
+#' p <- e6[ ,2:7]
 #' full_search <- fe_search(predictors = p, target = t)
 #' goodies <- head(full_search, 20)
-#' mask_histogram(goodies, 8, caption = "mask bits in top 10 Gammas")
-#'
+#' mask_histogram(goodies, 6, caption = "mask bits in top 20 Gammas")
 #' baddies <- tail(full_search, 20)
-#' mask_histogram(baddies, 8, caption = "bits appearing in 10 worst gammas")
-#' }
+#' mask_histogram(baddies, 6, caption = "bits appearing in 20 worst Gammas")
 mask_histogram <- function(fe_result,
                            dimension,
                            tick_step = 2,

@@ -8,12 +8,16 @@ gamma_histogram(fe_results, bins = 100, caption = "")
 }
 \arguments{
 \item{fe_results}{The result of fe_search or full_embedding_search.  A matrix
-containing a column labeled x, of Numeric gamma values.
+containing a column labeled Gamma, of Numeric Gamma values.
 It also contains an integer column of masks, but that is not used by this function.}
 
 \item{bins}{Numeric, number of bins in the histogram}
 
 \item{caption}{Character string caption for the plot}
+}
+\value{
+a ggplot object, a histogram showing the distribution of Gamma values
+full embedding search output
 }
 \description{
 Produce a histogram showing the distribution in a population of gamma
@@ -23,11 +27,9 @@ in the predictors.  For example, it this histogram is bimodal, there is probably
 one input variable which is absolutely required for a good predictive function.
 }
 \examples{
-\dontrun{
-e2_embed6 <- embed(mgls, 7)
-t <- e2_embed6[ ,1]
-p <- e2_embed6[ ,2:7]
+e6 <- embed(mgls, 7)
+t <- e6[ ,1]
+p <- e6[ ,2:7]
 full_search <- fe_search(predictors = p, target = t)
 gamma_histogram(full_search, caption = "my data")
-}
 }

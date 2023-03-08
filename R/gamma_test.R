@@ -10,6 +10,9 @@
 #' important class of smooth models.
 #'
 #' @export
+#' @references \url{https://royalsocietypublishing.org/doi/10.1098/rspa.2002.1010},
+#'             \url{https://link.springer.com/article/10.1007/s10287-003-0006-1},
+#'             \url{https://smoothregression.com}
 #' @param predictors A Numeric vector or matrix whose columns are proposed inputs to a predictive function.
 #' @param target A Numeric vector, the output variable that is to be predicted
 #' @param n_neighbors An Integer, the number of near neighbors to use in calculating gamma

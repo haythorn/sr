@@ -7,9 +7,9 @@
 #' @param intMask An Integer vector whose length equals number of columns in data
 #' @return A matrix containing the columns of data for which intMask is 1
 #' @examples
-#' e2 <- embed(mgls, 13)
-#' tn <- e2[ , 1]
-#' pn <- e2[ ,2:13]
+#' e12 <- embed(mgls, 13)
+#' tn <- e12[ , 1]
+#' pn <- e12[ ,2:13]
 #' msk <- integer(12)
 #' msk[c(1,2,3,4,6,7,9)] <- 1  # select these columns
 #' p <- select_by_mask(pn, msk)

@@ -90,11 +90,15 @@ For the right choices of the a and b the behavior is chaotic.  The data doesn't 
 
 ### Finding a good embedding
 
-But the overlords who are presenting us with the problem haven't told us that, maybe they don't know.  How do we figure it out?
+But the overlords who are presenting us with the problem haven't told us that, maybe they don't know.  It's not obvious from the graph.  How do we figure it out?
 
-We need answers to several questions, the first is: how far back in time do we have to look, in order to predict the next point?  Each measurement from the past has a lag.  Together the lags we look at make an embedding.  We need to find an embedding.
+We need answers to several questions:
+  - can we predict future values from the past? how well?
+  - how many previous values do we need and which ones?
+  - how good will the resulting model be?
+When we know the answers to these questions we will know how to train a neural network.  We can get the answers from a few simple searches using the Gamma test.
 
-To do this, we begin by making a trial.  I will arbitrarily pick an embedding depth of 15, so we'll be seeing how well we can predict each point using the previous 15 - after the first 15 of course.  embed from the stats library reverses the order of the values, so the targets are in column 1, with the lag 1 predictors in column 2.
+We begin by making a trial embedding, using more inputs than we think we need.  I will arbitrarily pick an embedding depth of 15, so we'll be seeing how well we can predict each point using the previous 15, after the first 15 of course.  `embed` from the stats library reverses the order of the values, so the targets are in column 1, with the lag 1 predictors in column 2.
 
 
 ```{r embed_henon}
@@ -240,7 +244,7 @@ with(test_result, sum((actual - predicted)^2))
 
 
 
-This vignette is not going to go into detail about working between Gamma and neural net software, that deserves a vignette of its own, but we will make one pass at it here, to show you the general approach.  The Gamma test can be used with any neural net software that allows a mean squared error stopping condition for training.  nnet allows this with the abstol parameter. We will build a new net using this stopping condition, more hidden layer units, and a smaller decay parameter.  Decay is used to prevent overtraining, we have the Gamma test which is a more principled way to do that.  In general, when you adapt a model to Gamma, you will want to clear away a lot of stuff that's called "regularization", much of it is kludges that people have used because they didn't have a good mean squared error estimator, you do.
+This vignette is not going to go into detail about working between Gamma and neural net software, that deserves a vignette of its own, but we will make one pass at it here, to show you the general approach.  The Gamma test can be used with any neural net software that allows a mean squared error stopping condition for training.  nnet allows this with the abstol parameter. We will build a new net using this stopping condition, more hidden layer units, and a smaller decay parameter.  Decay is used to prevent over-training, we have the Gamma test which is a more principled way to do that.  In general, when you adapt a model to Gamma, you will want to clear away a lot of stuff that's called "regularization", much of it is kludges that people have used because they didn't have a good mean squared error estimator, you do.
 
 
 ```{r nnet_by_gamma, cache=TRUE, fig.width=8}
@@ -288,7 +292,7 @@ This does considerably better.  Gamma still says we can cut the error in half bu
   
   - **to evaluate the performance of a model** - Although our first model looked OK, given the complexity of what it had to model, the Gamma test told us that we could do better.  A mean squared error estimator tells you how well your model should do, so you know when you need to build another model.  
   
-  - **to prevent overtraining** - Learning algorithms are subject to overfitting.  Gamma does not work by minimizing some parameter, it directly measures the variance of the noise.  It is called the Gamma "test" because it directly tests for the presence of a smooth function.  This makes it a good complement to machine learning algorithms.  
+  - **to prevent over-training** - Learning algorithms are subject to overfitting.  Gamma does not work by minimizing some parameter, it directly measures the variance of the noise.  It is called the Gamma "test" because it directly tests for the presence of a smooth function.  This makes it a good complement to machine learning algorithms.  
   
 
 We will look at several more examples in which we will put varying amounts of noise into the relationship between the predictors and the target.  
@@ -394,7 +398,7 @@ gamma_test(pre, t2)  # noise var=.75 added
 ```
 
 
-You can see from this that the Gamma test estimate of noise in a data relationship is quite accurate, of course we are using about twice as much data as the M test tells us we need:
+You can see from this that the Gamma test estimate of noise in a data relationship is quite accurate.  We have a lot of data, but the M list on the .075 variance data shows that Gamma's estimate only starts to get stable around a sample size of 4500.
 
 
 

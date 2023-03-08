@@ -19,12 +19,10 @@
 #' @return An invisible data frame containing starting and ending positions of
 #' each window with its associated gamma
 #' @examples
-#' \dontrun{
 #' he <- embed(henon_x, 13)
 #' t <- he[ , 1]
 #' p <- he[ ,2:13]
-#' moving_window_search(p, t, by = 4, caption = "my data")
-#' }
+#' moving_window_search(p, t, by = 5, caption = "my data")
 #===========================================================
 moving_window_search <- function(predictors,
                                 target,

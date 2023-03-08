@@ -24,7 +24,9 @@ this greater than zero can significantly reduce search time for large data sets.
 \value{
 An invisible data frame with two columns, an integer mask representing a particular subset of
 the predictors, and the value of Gamma using those predictors and the target.
-This is sorted from lowest to highest Gamma.
+This is sorted from lowest to highest Gamma.  This data.frame also has an attribute
+named target_V, containing the target variance which is the same for all rows.
+To get the vratio for any row, divide its Gamma by target_v.
 }
 \description{
 Calculates gamma for all combinations of a set of input predictors
@@ -34,22 +36,18 @@ Given a set of predictors and a target that is to be predicted, this search
 will run the gamma test on every combination of the inputs.  It returns the
 results in order of increasing gamma, so the best combinations of inputs for
 prediction will be at the beginning of the list.  As this is a fully
-combinatoric search, it will start to get slow beyond about 20 inputsd.
+combinatoric search, it will start to get slow beyond about 16 inputs.  By default,
+fe_search will display a progress bar showing the time to completion.
 
-fe_search() returns a data.frame of two elements, the first is a sorted vector of
-gamma values, and the second is an integer representing the mask used to
-select the inputs for each run from all the predictors passed to the search.
+fe_search() returns a data.frame of two elements, a sorted vector of
+Gamma values, and an integer containing the mask representing the inputs
+used to calculate that Gamma, selected from the predictors passed to the search.
 To reconstruct each data set, use int_to_intMask and select_by_mask as shown
-in the solar data section of the vignette. This is the "non verbose" version
-of full embedding search, it does not interact with console. It is wrapped by
-full_embedding_search(), which displays timing estimates and a histogram of
-the outputs.
+in their examples.
 }
 \examples{
-\dontrun{
-e2_embed6 <- embed(mgls, 7)
-t <- e2_embed6[ ,1]
-p <- e2_embed6[ ,2:7]
+e6 <- embed(mgls, 7)
+t <- e6[ ,1]
+p <- e6[ ,2:7]
 full_search <- fe_search(predictors = p, target = t)
-}
 }

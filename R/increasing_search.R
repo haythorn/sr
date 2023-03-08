@@ -8,17 +8,20 @@
 #' search adds previous values one at a time, and saves the resulting gammas.  These
 #' results can be examined using plot_increasing_search()
 #' @export
-#' @param predictors A vector or matrix whose columns are proposed inputs to a predictive function
+#' @param predictors A vector or matrix whose columns are proposed inputs to a
+#' predictive function
 #' @param target A vector of double, the output variable that is to be predicted
 #' @param plot Logical, set plot = FALSE if you don't want the plot
 #' @param caption Character string to identify plot, for example, data being plotted
 #' @param show Character string, if it equals "vratio", vratios will be plotted,
 #' otherwise Gamma is plotted
-#' @return An invisible data frame showing the depth of search and associated Gamma
+#' @return An invisible data frame with three columns, Depth of search, from
+#' 1 to ncol(predictors), Gamma calculated using columns 1:Depth as predictors,
+#' and vratio corresponding to that Gamma (Gamma / var(target))
 #' @examples
-#' he <- embed(henon_x, 17)
+#' he <- embed(henon_x, 13)
 #' t <- he[ , 1]
-#' p <- he[ ,2:17]
+#' p <- he[ ,2:13]
 #' increasing_search(p, t, caption = "henon data embedded 16")
 #' df <- increasing_search(predictors=p, target=t, plot = FALSE)
 #===========================================================

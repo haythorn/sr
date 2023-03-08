@@ -18,11 +18,11 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-Smooth Regression is a set of techniques for finding causal relationships in precision data.  It is built around the Gamma test.  If you have some measurements that might be predictive, and a target that you want to predict, Gamma estimates the mean squared error of the best smooth model that could be built on that data.  In linear regression, the intercept coefficient tells you the expected error of the model.  Gamma does this for smooth models as a class.  It measures smoothness in a data relationship.  Smoothness is a property of natural causal processes.  Natural processes differ from noise because they are smooth, and noise is not.  Neural networks are smooth models, as are differential equations whose derivatives don't become infinite.  Gamma is a mathematically principled answer to the overtraining problem in machine learning.
+Smooth Regression is a set of techniques for finding causal relationships in precision data.  It is built around the Gamma test.  If you have some measurements that might be predictive, and a target that you want to predict, Gamma estimates the mean squared error of the best smooth model that could be built on that data.  In linear regression, the intercept coefficient tells you the expected error of the model.  Gamma does this for smooth models as a class.  It measures smoothness in a data relationship.  Smoothness is a property of natural causal processes.  Natural processes differ from noise because they are smooth, and noise is not.  Neural networks are smooth models, as are differential equations whose derivatives don't become infinite.  Gamma is a mathematically principled answer to the over-training problem in machine learning.
 
 In order to detect smoothness, Gamma needs precision data.  For category and small integer data, you should use traditional methods - traditional statistics is very good at category problems.  Gamma works on continuous data.  In practice this means that values should range across two or more full digits precision in all of your variables.  .
 
-Gamma can find causal relationships, including lags and embeddings for time series models.  It can also be used to tune the performance of neural networks. This package, 'sr',  provides the Gamma test along with a toolkit of search techniques that use it.
+Gamma finds causal relationships including lags and embeddings for time series models.  It can also be used to tune the performance of neural networks. This package, `sr`,  provides the Gamma test along with a toolkit of search techniques that use it.
 
 
 ## Installation
