@@ -2,12 +2,12 @@
 % Please edit documentation in R/select_by_mask.R
 \name{select_by_mask}
 \alias{select_by_mask}
-\title{Select Columns Using a Bitmask}
+\title{Select by Mask}
 \usage{
 select_by_mask(data, intMask)
 }
 \arguments{
-\item{data}{A Numeric vector or matrix in tidy form}
+\item{data}{A numeric matrix in tidy form}
 
 \item{intMask}{An Integer vector whose length equals number of columns in data}
 }
@@ -15,6 +15,9 @@ select_by_mask(data, intMask)
 A matrix containing the columns of data for which intMask is 1
 }
 \description{
+Select columns from a matrix using an integer bitmap
+}
+\details{
 Selects columns from a matrix.  A column is included in the output when the
 corresponding mask value is 1.
 }

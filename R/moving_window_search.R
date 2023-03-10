@@ -4,8 +4,8 @@
 #'
 #' This is used for data sets that are ordered on one or more dimension, such as
 #' time series or spatial data.  The search slides a window across the data set,
-#' calculating gamma for the data at each step  A change in causal dynamics will
-#' appear as a spike in gamma when the causal discontinuity is in the window,
+#' calculating gamma for the data at each step.  A change in causal dynamics will
+#' appear as a spike in gamma when the causal discontinuity is in the window.
 #' @export
 #' @param predictors A Numeric vector or matrix whose columns are proposed inputs
 #' to a predictive function

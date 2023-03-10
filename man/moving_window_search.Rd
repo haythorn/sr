@@ -41,8 +41,8 @@ Calculate Gamma values for a window moving through the data.
 \details{
 This is used for data sets that are ordered on one or more dimension, such as
 time series or spatial data.  The search slides a window across the data set,
-calculating gamma for the data at each step  A change in causal dynamics will
-appear as a spike in gamma when the causal discontinuity is in the window,
+calculating gamma for the data at each step.  A change in causal dynamics will
+appear as a spike in gamma when the causal discontinuity is in the window.
 }
 \examples{
 he <- embed(henon_x, 13)

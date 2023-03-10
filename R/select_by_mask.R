@@ -1,9 +1,11 @@
-#' Select Columns Using a Bitmask
+#' Select by Mask
+#'
+#' Select columns from a matrix using an integer bitmap
 #'
 #' Selects columns from a matrix.  A column is included in the output when the
 #' corresponding mask value is 1.
 #' @export
-#' @param data A Numeric vector or matrix in tidy form
+#' @param data A numeric matrix in tidy form
 #' @param intMask An Integer vector whose length equals number of columns in data
 #' @return A matrix containing the columns of data for which intMask is 1
 #' @examples

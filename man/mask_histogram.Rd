@@ -2,7 +2,7 @@
 % Please edit documentation in R/mask_histogram.R
 \name{mask_histogram}
 \alias{mask_histogram}
-\title{Mask histogram - display a histogram of mask bits.}
+\title{Mask Histogram}
 \usage{
 mask_histogram(fe_result, dimension, tick_step = 2, caption = "")
 }
@@ -24,6 +24,9 @@ A ggplot object, a histogram showing the mask bits used in the fe_search
 results that are passed to it
 }
 \description{
+Display a histogram of mask bits.
+}
+\details{
 After a full embedding search, it is sometimes useful to see which bits
 appear in a subset of the masks, for example, the masks with the lowest Gamma
 values.  Filtering of the search results should be done before calling this

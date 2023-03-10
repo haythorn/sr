@@ -1,4 +1,6 @@
-#' Mask histogram - display a histogram of mask bits.
+#' Mask Histogram
+#'
+#' Display a histogram of mask bits.
 #'
 #' After a full embedding search, it is sometimes useful to see which bits
 #' appear in a subset of the masks, for example, the masks with the lowest Gamma

@@ -33,15 +33,14 @@ approximate search can run in O(M*log(M))}
 }
 \value{
 If verbose == FALSE, a list containing Gamma and the vratio, If verbose == TRUE,
-that list plus the distances by near neighbor position, the average of squared distances,
-and the value returned by lm on the delta and gamma averages, of which Gamma is Coefficient 1.
+that list plus the distances from each point to its near neighbors, the average of squared distances,
+and the value returned by lm on the delta and gamma averages.  Gamma is Coefficient 1 of lm.
 }
 \description{
-The gamma test measures mean squared error in an input/output dataset, relative
+The gamma test measures mean squared error in an input/output data set, relative
 to an arbitrary, unknown smooth function.  This can usually be interpreted as testing
 for the existence of a causal relationship, and estimating the expected error of the
-best smooth model that could be built on that relationship.  Neural networks are an
-important class of smooth models.
+best smooth model that could be built on that relationship.
 }
 \examples{
 he <- embed(henon_x, 3)

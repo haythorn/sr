@@ -18,10 +18,10 @@ A vector of integer containing 1 or 0
 Converts the bit representation of an integer into a vector of integers
 }
 \details{
-This converts an integer to a vector of ones and zeroes.  It is used as a helper
-function for full_embedding_search, and allows more compact storage of bit masks.
+Converts an integer to a vector of ones and zeroes.  Used as a helper
+function for full_embedding_search, it allows more compact storage of bit masks.
 The result reads left to right, so the one bit will have index of one in the
-vector corresponding to the lag in an embedding.  It will work for masks up
+vector corresponding to lag 1 in an embedding.  Works for masks up
 to 32 bits
 }
 \examples{

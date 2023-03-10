@@ -20,11 +20,12 @@ a ggplot object, a histogram showing the distribution of Gamma values
 full embedding search output
 }
 \description{
-Produce a histogram showing the distribution in a population of gamma
+Produces a histogram showing the distribution in a population of Gamma
 values, used to examine the result of a full embedding search.  Pass the result
-of fe_search() Use this function to look for structure
-in the predictors.  For example, it this histogram is bimodal, there is probably
-one input variable which is absolutely required for a good predictive function.
+of fe_search() to this function to look for structure in the predictors.
+For example, it this histogram is bimodal, there is probably one input variable
+which is absolutely required for a good predictive function, so the histogram
+divides into the subset containing that variable, and the others that don't.
 }
 \examples{
 e6 <- embed(mgls, 7)

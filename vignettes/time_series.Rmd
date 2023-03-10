@@ -126,7 +126,7 @@ Gamma estimates noise - mean squared error. This plot shows Gamma dropping to al
 
 Looking at the graph, one might imagine that an embedding of 6 would be somehow better than 2, "more stable" or whatever.  But if the lags between 3 and 6 added any information, *Gamma would go down*.   In this case, of course, they can't add information, because the mean squared error estimate is already zero.  But in general, when you see a long flat floor on the increasing embedding search, the causality is at the beginning.  Those additional variables are not confirming votes, it's just that the relationship is strong enough that it is not obscured by a few  random variables.  
 
-If you want to work with the numbers, you can get the result of the increasing search as a data.frame:
+`increasing search` also returns its findings as a data.frame:
 
 
 ```{r get_increasing}
@@ -138,7 +138,7 @@ If you want to work with the numbers, you can get the result of the increasing s
 ```
 
 
-So, looking at the graph I'm going to use an embedding of 2.  We will also scale the data, before dividing it into training and test sets for the neural network.  To build the neural net I will use the nnet package, which expects its data to be scaled between 0 and 1.  Gamma does not require scaling.
+So I'm going to use an embedding of 2.  We will also scale the data before dividing it into training and test sets for the neural network.  To build the neural net I will use the nnet package, which expects its data to be scaled between 0 and 1.  Gamma does not require scaling.
 
 
 ```{r gamma_test}
@@ -160,12 +160,12 @@ So, looking at the graph I'm going to use an embedding of 2.  We will also scale
   gamma_test(predictors = p, target = t)
 ```
 
-Real noise in the data is zero, the Gamma estimate is 1.58e-05, close enough for statistical work.  To understand the results without having to think about how the data is scaled, use the vratio, which is Gamma divided by Var(targets), so it gives the percentage of variance accounted for by estimated noise, and 1 - vratio gives the percentage accounted for by the unknown smooth function, .9998 in this case.
+Real noise in the data is zero, the Gamma estimate is 1.58e-05, close enough for statistical work.  To understand the results without having to think about how the data is scaled, use the vratio, which is Gamma divided by Var(targets), so it gives the fraction of variance accounted for by estimated noise, and 1 - vratio gives the part accounted for by the unknown smooth function, .9998 in this case.
 
 
 ### Do we have enough data? - the M list
 
-A second question is, how much confidence can we have in Gamma's estimate of the true noise?  Unfortunately, at this time there isn't any known way to calculate confidence intervals around Gamma, but the **M list** gives us a basis for a heuristic confidence estimate.  It allows us to see if Gamma becomes more stable as we add more data.  If it doesn't, we probably don't have enough data.  
+A second question is, how much confidence can we have in Gamma's estimate of the true noise?  Unfortunately, at this time there isn't any known way to calculate confidence intervals around Gamma, but the **M list** gives us a basis for a heuristic confidence estimate.  With it we can see if Gamma becomes more stable as we add more data.  If it doesn't, we probably don't have enough data.  
 
 The function get_Mlist computes Gamma for larger and larger portions of the data set.  What we are looking for in an M list is stability - after a certain point, Gamma should settle to an estimate that doesn't drift as more data is added.   
 
@@ -179,7 +179,7 @@ The function get_Mlist computes Gamma for larger and larger portions of the data
 ```
 
 
-In this case, as M increases, Gamma is supernaturally stable. Based on this M list, I'm going to put 600 cases in the training set and keep 400 for the test set.  
+In this case - a deterministic function - as M increases Gamma is supernaturally stable. Again, you won't see graphs like this in the real world.  Based on this M list, I'm going to put 600 cases in the training set and keep 400 for the test set.  
 
 
 ```{r}
@@ -197,7 +197,7 @@ test_p <- p[601:lt, ]
 
 ### Building a model
 
-Now we are going to  build a neural net using the nnet package.  We will begin by using the parameters in the reference page example and hidden layer size equal to the number of predictors, a choice which is often recommended by the internet.
+Now we are going to  build a neural net using the nnet package.  We will begin by using the parameters on the reference page example, and set the hidden layer size equal to the number of predictors, a bit of bad advice one can find on the internet.
 
 
 ```{r nnet_model, cache=TRUE, fig.width=8}
@@ -253,9 +253,9 @@ estimated_sse <- train_gamma * length(train_t)
 gamma_model <- nnet(x = train_p, y = train_t, size = 8, rang = 0.1,
                 decay = 1e-5, maxit = 2000, abstol =  estimated_sse)
 
-predicted_gt <- predict(gamma_model, test_p, type = "raw")
+predicted_t <- predict(gamma_model, test_p, type = "raw")
 
-test_result <- data.frame(idx = 1:length(test_t), predicted_gt[ ,1], test_t)
+test_result <- data.frame(idx = 1:length(test_t), predicted_t[ ,1], test_t)
 colnames(test_result) <- c("idx", "predicted", "actual")
 
 ggplot(data = test_result[1:100, ]) +
@@ -292,16 +292,14 @@ This does considerably better.  Gamma still says we can cut the error in half bu
   
   - **to evaluate the performance of a model** - Although our first model looked OK, given the complexity of what it had to model, the Gamma test told us that we could do better.  A mean squared error estimator tells you how well your model should do, so you know when you need to build another model.  
   
-  - **to prevent over-training** - Learning algorithms are subject to overfitting.  Gamma does not work by minimizing some parameter, it directly measures the variance of the noise.  It is called the Gamma "test" because it directly tests for the presence of a smooth function.  This makes it a good complement to machine learning algorithms.  
+  - **to prevent over-training** - Learning algorithms are subject to overfitting.  Gamma does not work by minimizing some parameter, it estimates the variance of the noise.  It is called the Gamma "test" because it directly tests for the presence of a smooth function.  This makes it a good complement to machine learning algorithms.  
   
-
-We will look at several more examples in which we will put varying amounts of noise into the relationship between the predictors and the target.  
 
 
 
 ## 2) Relationships with Noise
 
-The first example used the Henon Map with no noise.  This allowed us to see how the Gamma test responds to a deterministic relationship.  In the remaining examples, we will use a more complex function and put varying amounts of noise on the relationship.   As you will see, these examples are not realistic but they are mathematically clear, so you can easily judge the accuracy of the Gamma test.  
+The first example used the Henon Map with no noise, and we saw that Gamma can recognize a deterministic relationship.  But what if there's noise in our data?  Going forward we will use a more complex function and put varying amounts of noise on the relationship.   As you will see, these examples are not realistic but they are mathematically clear, so you can easily judge the accuracy of the Gamma test.  
 
 
 
@@ -365,14 +363,14 @@ tar <- me[ ,1]
 
 ::::
 
-This is definitive.  The function is in fact driven by the first four lags, and Gamma has shown again that it can reliably detect smooth predictive relationships in data.  
+This is definitive.  The function is in fact driven by the first four lags, and Gamma has shown again that it can reliably detect smooth predictive relationships.  
 
 
 
 ### Mackey-Glass with Noise
 
 
-We're going to look at two levels of noise, one which is about half the variance of the signal and the second about equal to the signal.  We're going to do this in an unnatural way, by adding a random variable to the target only:
+We're going to look at two levels of noise, one which is about half the variance of the signal and the second about equal to the signal.  We'll do this in an unnatural way, by adding a random variable to the target only:
 
 
 ```{r mgls_add_noise}
@@ -398,7 +396,7 @@ gamma_test(pre, t2)  # noise var=.75 added
 ```
 
 
-You can see from this that the Gamma test estimate of noise in a data relationship is quite accurate.  We have a lot of data, but the M list on the .075 variance data shows that Gamma's estimate only starts to get stable around a sample size of 4500.
+Gamma's estimate of noise is quite accurate.  We have a lot of data, but the M list on the .075 variance data, when the noise is about half of the signal, shows that Gamma only starts to get stable around a sample size of 4500.
 
 
 
@@ -435,7 +433,7 @@ You can see from this that the Gamma test estimate of noise in a data relationsh
 ::::
 
 
-These graphs can be displayed in terms of the vratio.  This is Gamma divided by the variance of the target, that is, it tells the percent of variance attributed to noise. .075 is almost equal to the original signal.
+These graphs can be displayed in terms of the vratio.  This is Gamma divided by the variance of the target, that is, it tells the fraction of variance attributed to noise. .075 is almost equal to the original signal.
 
 
 ---
@@ -604,13 +602,12 @@ All the embeddings show Gamma close to 1, and this M list seems to be converging
 
 **The second and third examples made one important point:**
 
-  - **Gamma correctly estimates noise, against unknown smooth functions, over the range from 0 to 1** - We demonstrated Gamma accurately measuring the noise in five cases, in which we knew the actual noise that had been added.  The vratios, noise to total variance, were 0, 0, .34, .49, and 1.  The Gamma estimate was very close in all these cases, even though for all of them the underlying causal relationship was chaotic.  Gamma estimates mean squared error against smooth functions as a class, that is, against all smooth functions simultaneously. 
-  
+  - **Gamma correctly estimates noise, against unknown smooth functions, over the range from 0 to 1** - We demonstrated Gamma accurately measuring the noise in five cases, in which we knew the actual noise that had been added.  The vratios -the  noise fractions of total variance - were 0, 0, .34, .49, and 1.  The Gamma estimate was very close in all these cases.
   
 
 ## Appendix: Looking under the hood at Gamma
 
-The gamma_test function has a plot option that allows us to see how the near neighbor search relates to the computation of Gamma.  We will look at the noise cases first.
+The Gamma test is a tool, you can use it without knowing how it works, but for people who want to look under the hood, I've provided this handy appendix.  The `gamma_test` function has a plot option which shows how the near neighbor search relates to the computation of Gamma.  We will look at the noise cases first.
 
 
 ### The pure noise case:
@@ -621,7 +618,7 @@ gamma_test(n_predictors, n_target, plot = TRUE, caption = "random variable")
 
 The black dots are the distances in output space (y) plotted against distances to near neighbors in the input space (x) .  The red dots are the average distances for the first, second, third and so on nearest neighbors.  The Gamma regression line in blue is drawn using the squares of those averages.  As data density increases, the y intercept of the gamma regression line converges on the noise variance.
 
-In this plot we see pure noise.  The distances to near neighbors in output space have no relation to the distance in input space.  The Gamma regression line is horizontal, the y intercept is at 1, and the vratio is 1.  Gamma is telling us, correctly, that all of the variance in this data comes from noise, the predictors have no smooth relationship with the target. 
+In this plot we see pure noise.  The distances to near neighbors in output space have no relation to the distance in input space, so the Gamma regression line is horizontal. The y intercept is at 1, and the vratio is 1.  Gamma is telling us, correctly, that all of the variance in this data comes from noise, the predictors have no smooth relationship with the target. 
 
 
 ### Mixed causality and noise:
@@ -630,7 +627,7 @@ In this plot we see pure noise.  The distances to near neighbors in output space
 gamma_test(predictors=pre, target=t1, plot = TRUE, caption = "mixed causality and noise")
 ```
   
-This plot shows causality with noise.  In real world data the noise would be caused by measurement error or causal variables that are not being measured.  In the plot, the Gamma regression line has positive slope, indicating the presence of a smooth relationship. The intercept is above 0, indicating the presence of noise.  The vratio is 0.34, so estimated noise is 34% of the sample variance, and we should be able to build a model with that mean squared error.
+This plot uses the .04 noise data set; it shows causality with noise.  In the plot, the Gamma regression line has positive slope.  This indicates the presence of a smooth relationship because, on average, a point's first nearest neighbor is closer in output space than its second and third. The intercept is above 0, indicating the presence of noise.  The vratio is 0.34, so estimated noise is 34% of the sample variance, and we should be able to build a model with that mean squared error.
 
 
 ### Henon with no noise:
@@ -643,6 +640,6 @@ This plot shows causality with noise.  In real world data the noise would be cau
 
 ```
 
-The gamma regression line has positive slope and its intercept is zero, showing that the inputs and output are related by an unknown smooth function.  This triangular shape of the delta-gamma graph shows that smooth function.  If this were a linear function, change in delta would be linearly related to change in gamma, so all of the black points would lie on a line.  Instead, because the function has curvature, neighboring points lie above and below the line.  Between a point and its near neighbors, either the deltas or gammas change more rapidly, the curve separates from the tangent, producing the spray of points seen here. 
+The gamma regression line has positive slope and its intercept is zero, showing that the inputs and output are related by an unknown smooth function.  This triangular shape of the delta-gamma graph shows that smooth function.  If the function was linear, change in delta would be linearly related to change in gamma, so all of the black points would lie on a line.  Instead, because the function has curvatur either the deltas or gammas change more rapidly, producing the spray of points seen here. 
 
 

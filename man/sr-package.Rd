@@ -6,7 +6,7 @@
 \alias{sr-package}
 \title{sr: Smooth Regression - The Gamma Test and Tools}
 \description{
-Finds causal connections in precision data, finds lags and embeddings in time series, guides and evaluates the performance of neural networks and other smooth models, gives a mathematically sound answer to the over-training problem. Smooth regression is based on the Gamma test, which measures smoothness in a multivariate relationship. 'sr' includes the Gamma test and search techniques that use it. See references in the help for function `gamma_test`.
+Finds causal connections in precision data, finds lags and embeddings in time series, guides training of neural networks and other smooth models, evaluates their performance, gives a mathematically grounded answer to the over-training problem. Smooth regression is based on the Gamma test, which measures smoothness in a multivariate relationship. Causal relations are smooth, noise is not. 'sr' includes the Gamma test and search techniques that use it. References: Evans & Jones (2002) \doi{10.1098/rspa.2002.1010}, AJ Jones (2004) \doi{10.1007/s10287-003-0006-1}.
 }
 \seealso{
 Useful links:

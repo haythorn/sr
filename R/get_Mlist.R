@@ -1,8 +1,15 @@
 #' Discover how Gamma varies with sample size
 #'
-#' Produces a list of M values (sample sizes), and the associated Gammas. The
-#' graph will become stable when the sample size is large enough. The function
-#' produces a graph by default, and also returns a data.frame.
+#' Investigates the effect of sample size by calculating Gamma on larger and larger
+#' samples.  Gamma will converge on the true noise in the relationship as sampling
+#' density on the function increases.  `get_Mlist` produces a showing M values
+#' (sample sizes), and the associated Gammas and vratios. It produces a graph by
+#' default, and also returns an invisible data.frame.  The successive samples are
+#' taken starting at the beginning of the inputs.  There is no option to sort
+#' the input data; if you want the data to be randomized, do that before calling
+#'  `get_Mlist`.  The graph will become stable when the sample size is large enough.
+#'  If the M list does not become stable, there is not enough data for either the
+#'  Gamma test or a successful smooth model.
 #' @export
 #' @param predictors A Numeric vector or matrix whose columns are proposed
 #' inputs to a predictive relationship
@@ -14,8 +21,8 @@
 #' @param from Integer length of the first data sample, as passed to seq
 #' @param by Integer increment in lengths of successive windows, passed to seq
 #' @param to Integer maximum length of sample to test, passed to seq
-#' @return An invisible data frame containing Gamma values, vratios and M, the
-#' length of the associated subset of the data.
+#' @return An invisible data frame with three columns: M (a sample size), Gamma
+#' and the associated vratio.  This is ordered by increasing M.
 #' @examples
 #' he <- embed(henon_x, 13)
 #' t <- he[ , 1]

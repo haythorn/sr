@@ -1,11 +1,12 @@
 
 #' Plot Histogram of Gammas
 #'
-#' Produce a histogram showing the distribution in a population of gamma
+#' Produces a histogram showing the distribution in a population of Gamma
 #' values, used to examine the result of a full embedding search.  Pass the result
-#' of fe_search() Use this function to look for structure
-#' in the predictors.  For example, it this histogram is bimodal, there is probably
-#' one input variable which is absolutely required for a good predictive function.
+#' of fe_search() to this function to look for structure in the predictors.
+#' For example, it this histogram is bimodal, there is probably one input variable
+#' which is absolutely required for a good predictive function, so the histogram
+#' divides into the subset containing that variable, and the others that don't.
 #' @export
 #' @param fe_results The result of fe_search or full_embedding_search.  A matrix
 #' containing a column labeled Gamma, of Numeric Gamma values.

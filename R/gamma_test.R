@@ -3,11 +3,10 @@
 # ===========================================================
 #' Estimate Smoothness in an Input/output Dataset
 #'
-#' The gamma test measures mean squared error in an input/output dataset, relative
+#' The gamma test measures mean squared error in an input/output data set, relative
 #' to an arbitrary, unknown smooth function.  This can usually be interpreted as testing
 #' for the existence of a causal relationship, and estimating the expected error of the
-#' best smooth model that could be built on that relationship.  Neural networks are an
-#' important class of smooth models.
+#' best smooth model that could be built on that relationship.
 #'
 #' @export
 #' @references \url{https://royalsocietypublishing.org/doi/10.1098/rspa.2002.1010},
@@ -23,8 +22,8 @@
 #' @param caption A character string which will be the caption for the plot if plot = TRUE
 #' @param verbose A Logical variable, whether to return details of the computation
 #' @return If verbose == FALSE, a list containing Gamma and the vratio, If verbose == TRUE,
-#' that list plus the distances by near neighbor position, the average of squared distances,
-#' and the value returned by lm on the delta and gamma averages, of which Gamma is Coefficient 1.
+#' that list plus the distances from each point to its near neighbors, the average of squared distances,
+#' and the value returned by lm on the delta and gamma averages.  Gamma is Coefficient 1 of lm.
 #' @examples
 #' he <- embed(henon_x, 3)
 #' t <- he[ , 1]
@@ -71,8 +70,8 @@ gamma_test <- function(predictors,
     gamma_distances[ , i] <- abs(target - target[indexes])
 
     # average of squared errors by near neighbor position
-    delta_avgs[i] <- sum(delta_neighbors$nn.dists[ ,i] ^ 2) / npoints
-    gamma_avgs[i] <- sum(gamma_distances[ ,i] ^ 2) / (2 * npoints)
+    delta_avgs[i] <- mean(delta_neighbors$nn.dists[ ,i] ^ 2)
+    gamma_avgs[i] <- mean(gamma_distances[ ,i] ^ 2) / 2
   }
 
   # gamma statistic is the intercept of the gamma regression line
